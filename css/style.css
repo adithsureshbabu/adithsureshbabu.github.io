@@ -1,26 +1,28 @@
 body {
-    background-color: ivory;
-    padding-top: 100px;
-	}
+    background-color: darkorchid; 
+}
 
-#greeting {color:inherit;}
+#greeting {color:white;}
 
 a:hover {
 	text-decoration:underline;
 }
 
-.footer {
-	position: fixed;
+footer {
+	position: relative;
 	left: 0;
-	padding-top:0.8%;
-	bottom: 0;
+	bottom: 0%;
 	width: 100%;
 	background-color: #212121;
 	color: white !important;
 	text-align: center;
-	height:7%;
+	height:10%;
+	padding-top:0.7%;
 }
 
+.content {
+    min-height: calc(100vh - 119px);
+}
 .box-with-shadows {
 	color:#222222;
 	background-color:#f9f9f9;
@@ -36,13 +38,7 @@ a:hover {
 	margin:20px auto;
 	padding:20px;
 	position:relative;
-	z-index:10000
 }
-
-/* 3vw = 3% of width of viewport
-3vh = 3% of height of viewport
-3vmin = Smaller of 3vw or 3vh
-3vmax = Bigger of 3vw or 3vh */
 
 .input-box {
 	width:100%;
@@ -53,7 +49,8 @@ a:hover {
 	color:#007BFF;
 	border-radius: 30px;
 	text-align:center;
-}	
+}
+
 .input-box:focus {	
 	color:#007BFF;
 	border-color: #337AB7;
@@ -68,8 +65,8 @@ tr {height:25px;}
 
 .rc-table {
 	border-collapse: separate;
-	border-spacing: 0;
-	border: 1px solid #337AB7;
+	border-spacing: 0px;
+	border: 1px solid white;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	padding: 4px;
@@ -99,10 +96,10 @@ p {
 	height:35px;
 	border-radius:5px;
 	white-space: normal !important;
-    /* word-wrap: break-word; */
 }
 
 #submit {border-radius:20px !important;}
+#btnRefresh {border-radius:0px !important;}
 
 .error-text {
 	display:none;
