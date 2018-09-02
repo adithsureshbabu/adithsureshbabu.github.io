@@ -3,6 +3,7 @@ var api = 'http://ip-api.com/json';
 var url = api;
 
 function setup() {
+  removeDummy();
   loadJSON(url, gotData);
   var button = select('#submit');
   button.mousePressed(refresh);
@@ -21,10 +22,10 @@ function ipAsk() {
 
 function gotData(data) {
   ipdetails = data;
-  
+  ipdata();
 }
 
-function draw() {
+function ipdata() {
  
   if (ipdetails) {
     var autsys = ipdetails.as;  
@@ -52,4 +53,8 @@ function draw() {
 	document.getElementById("timezone").innerHTML = tzone;
 	document.getElementById("zipcode").innerHTML = zipcode
   }
+}
+
+function removeDummy() {
+	document.getElementById('defaultCanvas0').parentNode.removeChild(document.getElementById('defaultCanvas0'));
 }
