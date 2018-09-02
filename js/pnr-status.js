@@ -11,7 +11,7 @@ function setup() {
 	button2.mousePressed(refreshPnr);
 	document.getElementById("error-msg").style.display="none";
 	document.getElementById("pnr-data").style.display="none";
-  
+	removeDummy();
 }
 
 function refreshPnr() {
@@ -21,70 +21,70 @@ function refreshPnr() {
 }
 
 function pnrAsk() {
-	if (input.value() == "") {
-		alert("Please enter the PNR number!");
-	}
-	else if (input.value().length != 10) {
-		alert("PNR number should be 10-digits!");		
-	}
-	else {
-		var url = api + input.value() + apiKey;
-		loadJSON(url, gotData);
-	}	
-
+if (input.value() == "") {
+	alert("Please enter the PNR number!");
+}
+else if (input.value().length != 10) {
+	alert("PNR number should be 10-digits!");		
+}
+else {
+	var url = api + input.value() + apiKey;
+	//url='https://rawgit.com/adithsuresh5/3684f0bfe5eb3ab3edaa45a4e3bff756/raw/8957237c3ec99864f0e8d24520fcbdb29e3ed8cb/sample-pnr-data.json';
+	loadJSON(url, gotData);
+}
+	
 }
 
 function gotData(data) {
 pnrdetails = data;
-	if (pnrdetails) {  
-		var responsecode = pnrdetails.response_code;
-		var errmsg;
-		switch (responsecode) {
-			case 220:
-				document.getElementById("pnr-data").style.display="none";
-				document.getElementById("error-msg").style.display="block";
-				errmsg = "Flushed PNR!";
-				break;
-			case 221:
-				document.getElementById("pnr-data").style.display="none";
-				document.getElementById("error-msg").style.display="block";
-				errmsg = "Invalid PNR!";
-				break;
-			case 405:
-				document.getElementById("pnr-data").style.display="none";
-				document.getElementById("error-msg").style.display="block";
-				errmsg = "Indian Railways PNR Services are down, Please check after sometime!";
-				break;
-			case 500:
-				document.getElementById("pnr-data").style.display="none";
-				document.getElementById("error-msg").style.display="block";
-				errmsg = "Api-key expired!";			
-				break;		
-			case 200:
-				document.getElementById("error-msg").style.display="none";
-				document.getElementById("pnr-data").style.display="block";
-				proceed();
-				break;		
-			default:
-				document.getElementById("pnr-data").style.display="none";
-				document.getElementById("error-msg").style.display="block";
-				errmsg = "PNR data could not be loaded, Please check after sometime!";
-				break;	
-		}
-		document.getElementById("error-msg").innerHTML = errmsg;
-		setTimeout(function(){document.getElementById("error-msg").style.display="none";}, 4000);
-	}	
-
+if (pnrdetails) {  
+	var responsecode = pnrdetails.response_code;
+	var errmsg;
+	switch (responsecode) {
+		case 220:
+			document.getElementById("pnr-data").style.display="none";
+			document.getElementById("error-msg").style.display="block";
+			errmsg = "Flushed PNR!";
+			break;
+		case 221:
+			document.getElementById("pnr-data").style.display="none";
+			document.getElementById("error-msg").style.display="block";
+			errmsg = "Invalid PNR!";
+			break;
+		case 405:
+			document.getElementById("pnr-data").style.display="none";
+			document.getElementById("error-msg").style.display="block";
+			errmsg = "Indian Railways PNR Services are down, Please check after sometime!";
+			break;
+		case 500:
+			document.getElementById("pnr-data").style.display="none";
+			document.getElementById("error-msg").style.display="block";
+			errmsg = "Api-key expired!";			
+			break;		
+		case 200:
+			document.getElementById("error-msg").style.display="none";
+			document.getElementById("pnr-data").style.display="block";
+			proceed();
+			break;		
+		default:
+			document.getElementById("pnr-data").style.display="none";
+			document.getElementById("error-msg").style.display="block";
+			errmsg = "PNR data could not be loaded, Please check after sometime!";
+			break;	
+	}
+	document.getElementById("error-msg").innerHTML = errmsg;
+	setTimeout(function(){document.getElementById("error-msg").style.display="none";}, 4000);
+}	
 }
 
 function proceed() {
 var chart = pnrdetails.chart_prepared;
-	if (chart === true) {
-		chart = "CHART PREPARED";
-	} 
-	else {
-		chart = "CHART NOT PREPARED";
-	}
+if (chart === true) {
+	chart = "CHART PREPARED";
+} 
+else {
+	chart = "CHART NOT PREPARED";
+}
 
 document.getElementById("journeydate").innerHTML = pnrdetails.doj;
 document.getElementById("trainno").innerHTML = pnrdetails.train.number;
@@ -102,15 +102,15 @@ for(var i = document.getElementById("passenger").rows.length; i > 0;i--) {
 
 var passenger = pnrdetails.passengers;
 var tbody = document.getElementById("passenger");	
-	for (i = passenger.length-1; i >= 0; i--) {			
-		var td = tbody.insertRow(0);
-		td.insertCell(0).innerHTML=passenger[i].no;
-		tbody.rows[0].cells[0].className="rc-cell";
-		td.insertCell(1).innerHTML=passenger[i].booking_status;
-		tbody.rows[0].cells[1].className="rc-cell";
-		td.insertCell(2).innerHTML=passenger[i].current_status;
-		tbody.rows[0].cells[2].className="rc-cell";
-	}
+for (i = passenger.length-1; i >= 0; i--) {			
+	var td = tbody.insertRow(0);
+	td.insertCell(0).innerHTML=passenger[i].no;
+	tbody.rows[0].cells[0].className="rc-cell";
+	td.insertCell(1).innerHTML=passenger[i].booking_status;
+	tbody.rows[0].cells[1].className="rc-cell";
+	td.insertCell(2).innerHTML=passenger[i].current_status;
+	tbody.rows[0].cells[2].className="rc-cell";
+}
 
 } 
 
@@ -134,6 +134,9 @@ function updateURL() {
       if (history.pushState) {
           var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?pnr=' + input.value() ;
           window.history.pushState({path:newurl},'',newurl);
-      }
-	  
+      }  
+}
+
+function removeDummy() {
+	document.getElementById('defaultCanvas0').parentNode.removeChild(document.getElementById('defaultCanvas0'));
 }
