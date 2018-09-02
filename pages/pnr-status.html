@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <meta charset="UTF-8">	
+    <title>Train PNR Status</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.sound.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script type="text/javascript" src="../js/pnr-status.js"></script>	
+	<link rel="stylesheet" href="../css/style.css" />
+	<noscript>	
+	<META HTTP-EQUIV="Refresh" CONTENT="0;URL=../jsDisabledErrorPage.html">
+	</noscript>	
+</head>
+<body onload="urlQr();">
+<br/>
+<div class="box-with-shadows container">
+<center>
+	<p>PNR Number: &nbsp;&nbsp;&nbsp;</p>
+	<input class="form-control input-box" id ="pnrinput" placeholder="enter pnr here" maxlength="10" onkeypress="return ((event.charCode >= 48 &amp;&amp; event.charCode <= 57) ||  event.charCode == 0);" onkeyup="updateURL()" />
+	<br/>
+	<input type="submit" value="Check Status" id="submit" class="btn btn-outline-primary" onclick="updateURL();" />
+</center>
+</div>	
+<br/>
+<div id="error-msg" class="container alert alert-danger error-text">error-msg</div>
+<br/><br/>	
+<div id="pnr-data" class="container">  		 	
+<table id="tbljourneydet" class="table table-light table-hover rc-table"> <!--class="table-responsive w-100 d-md-table"-->	
+<tr>
+<th id="tblhead" colspan="2" class="th-bg rc-cell">PNR Status</th>
+</tr>
+	<tr>
+	<th>Date of Journey</th>
+	<td id="journeydate"></td>
+	</tr>	
+	<tr>
+	<th>Train Number</th>
+	<td id="trainno"></td>
+	</tr>	
+	<tr>
+	<th>Train Name</th>
+	<td id="trainname"></td>
+	</tr>	
+	<tr>
+	<th>From Station</th>
+	<td id="fromst"></td>
+	</tr>	
+	<tr>
+	<th>To Station</th>
+	<td id="tost"></td>
+	</tr>	
+	<tr>
+	<th>Boarding Point</th>
+	<td id="bdpt"></td>
+	</tr>	
+	<tr>
+	<th>Reservation Upto</th>
+	<td id="respt"></td>
+	</tr>	
+	<tr>
+	<th>Class</th>
+	<td id="jclass"></td>
+	</tr>	
+	<tr>
+	<th>Charting Status</th>
+	<td id="chstat"></td>
+	</tr>
+</table>
+<br/> 
+<table class="table table-bordered rc-table tcalign">
+    <thead class="th-bg" >
+      <tr>
+        <th class="rc-cell tcalign">Passenger</th>
+        <th class="rc-cell tcalign">Booking Status</th>
+        <th class="rc-cell tcalign">Current Status</th>
+      </tr>
+    </thead>
+    <tbody id="passenger" class="table-light"></tbody>
+  </table>
+ <br/>
+<center><input type="submit" value="Refresh" id="btnRefresh" class="btn btn-outline-dark" /></center>
+</div>
+<br/>
+</body>
+</html>
