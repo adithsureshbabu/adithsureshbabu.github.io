@@ -2,7 +2,10 @@ body {
     background-color: darkorchid; 
 }
 
-#greeting {color:white;}
+#greeting {
+	color:white;
+	margin-left: -220px!important;
+}
 
 a:hover {
 	text-decoration:underline;
