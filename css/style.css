@@ -1,5 +1,21 @@
+html {
+    background: #e6e9e9;
+    background-image: linear-gradient(270deg, rgb(230, 233, 233) 0%, rgb(216, 221, 221) 100%);
+    -webkit-font-smoothing: antialiased; 
+    background:url("https://rawgit.com/adithsuresh5/adithsuresh5.github.io/master/images/bg1.jpg") repeat fixed top center;
+}
+
 body {
-    background-color: darkorchid; 
+    background: white;
+    background:url("https://rawgit.com/adithsuresh5/adithsuresh5.github.io/master/images/bg2.png") repeat fixed top center;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.06);
+    color: #545454;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 20 auto;
+    max-width: 1200px;
+    padding: 2em 2em 2em;
 }
 
 nav {
