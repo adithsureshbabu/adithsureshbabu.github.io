@@ -1,42 +1,108 @@
-var ipdetails;
-var api = 'https://ipapi.co/json/';
-var url = api;
+<html>
 
-function setup() {
-  removeDummy();
-  loadJSON(url, gotData);
-  var button = select('#submit');
-  button.mousePressed(refresh);
- 
-}
+<head>
+    <title>IP Details - [TRICKS5AZ]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.sound.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/ip-details.js"></script>
+    <link rel="stylesheet" href="../css/style.css" />
+	<noscript>
+        <META HTTP-EQUIV="Refresh" CONTENT="0;URL=../jsDisabledErrorPage.html">
+    </noscript>
+</head>
 
-function refresh() {
-  setTimeout(ipAsk,500);
+<body>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark"><a id="pagetitle" class="navbar-brand" href="../index.html">TRICKS5AZ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav bg-dark mr-auto">
+                <li class="nav-item"><a class="nav-link btn-dark" href="../index.html">Home</a></li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle btn-dark" href="#" id="navbardrop" data-toggle="dropdown">Tools</a>
+                    <ul class="dropdown-menu">
+					<a class="dropdown-item" href="../pages/ip-details.html">IP Details</a>
+					<a class="dropdown-item" href="../pages/pnr-status.html">PNR Status</a>
+					</ul>
+                </li>
+                <li class="nav-item"><a class="nav-link btn-dark" href="https://tricks5az.blogspot.com/">Blog</a></li>
+                <li class="nav-item"><a class="nav-link btn-dark" href="../pages/about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link btn-dark" href="../pages/contact.html">Contact</a></li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-outline-info my-2 my-sm-0" type="button">Search</button>
+            </form>
+        </div>
+    </nav>
+    <div class="content">
+        <div class="container">
+            <br/>
+            <br/>
+            <table border="2px" class="table table-light  rc-table">
+                <tr>
+                    <th colspan=2 class="bg-dark" style="color:white;">Your IP Details: </th>
+                </tr>
+				<tr>
+                    <th class="table-warning">IP Address</th>
+                    <td id="ipad"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">City</th>
+                    <td id="city"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">Country</th>
+                    <td id="coun"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">Country Calling Code</th>
+                    <td id="ccc"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">Currency</th>
+                    <td id="curr"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">Latitude, Longitude</th>
+                    <td id="latlon"></td>
+                </tr>
+				<tr>
+                    <th class="table-warning" style="width:40%">Autonomous System</th>
+                    <td class="table-hover" id="auts"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">Organization</th>
+                    <td id="orga"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">Region</th>
+                    <td id="region"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">Time Zone</th>
+                    <td id="timezone"></td>
+                </tr>
+                <tr>
+                    <th class="table-warning">Zip Code</th>
+                    <td id="zipcode"></td>
+                </tr>
+            </table>
+            <br/>
+            <center>
+                <input type="button" value="Refresh" id="submit" class="btn btn-info" />
+            </center>
+        </div>
+        <br/>
+        <br/>
+    </div>
+    <footer>
+        <div>Copyright © 2018 - <a href="../index.html">TRICKS5AZ</a></div>
+    </footer>
+</body>
 
-}
-
-function ipAsk() {
-  loadJSON(url, gotData);
-
-}
-
-function gotData(data) {
-  ipdetails = data;
-  if (ipdetails) {
-	document.getElementById("auts").innerHTML = ipdetails.asn;
-	document.getElementById("city").innerHTML = ipdetails.city;
-	document.getElementById("coun").innerHTML = ipdetails.country_name + ' (' + ipdetails.country + ')';
-	document.getElementById("ccc").innerHTML = ipdetails.country_calling_code;
-	document.getElementById("curr").innerHTML = ipdetails.currency;
-	document.getElementById("latlon").innerHTML = ipdetails.latitude + ', ' + ipdetails.longitude;
-	document.getElementById("orga").innerHTML = ipdetails.org;
-	document.getElementById("ipad").innerHTML = ipdetails.ip;
-	document.getElementById("region").innerHTML = ipdetails.region + ' (' + ipdetails.region_code + ')';
-	document.getElementById("timezone").innerHTML = ipdetails.timezone + ' (' + ipdetails.utc_offset + ')';
-	document.getElementById("zipcode").innerHTML = ipdetails.postal;
-  }
-}
-
-function removeDummy() {
-	document.getElementById('defaultCanvas0').parentNode.removeChild(document.getElementById('defaultCanvas0'));
-}
+</html>
