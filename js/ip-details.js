@@ -1,5 +1,5 @@
 var ipdetails;
-var api = 'http://ip-api.com/json';
+var api = 'https://ipapi.co/json/';
 var url = api;
 
 function setup() {
@@ -22,36 +22,18 @@ function ipAsk() {
 
 function gotData(data) {
   ipdetails = data;
-  ipdata();
-}
-
-function ipdata() {
- 
   if (ipdetails) {
-    var autsys = ipdetails.as;  
-	var city = ipdetails.city;
-    var provider = ipdetails.isp;
-	var country = ipdetails.country;
-	var councode = ipdetails.countryCode;
-	var latitude = ipdetails.lat;
-	var longitude = ipdetails.lon;
-	var organiz = ipdetails.org;
-	var ipaddress = ipdetails.query;
-	var region = ipdetails.regionName;
-	var tzone = ipdetails.timezone;
-	var zipcode = ipdetails.zip; 	
-	document.getElementById("auts").innerHTML = autsys;
-	document.getElementById("city").innerHTML = city;  	
-	document.getElementById("prov").innerHTML =provider;
-	document.getElementById("coun").innerHTML = country;
-	document.getElementById("councode").innerHTML = councode;
-	document.getElementById("lati").innerHTML = latitude;
-	document.getElementById("longi").innerHTML = longitude;
-	document.getElementById("orga").innerHTML = organiz;
-	document.getElementById("ipad").innerHTML =ipaddress;
-	document.getElementById("region").innerHTML = region;
-	document.getElementById("timezone").innerHTML = tzone;
-	document.getElementById("zipcode").innerHTML = zipcode
+	document.getElementById("auts").innerHTML = ipdetails.asn;
+	document.getElementById("city").innerHTML = ipdetails.city;
+	document.getElementById("coun").innerHTML = ipdetails.country_name + ' (' + ipdetails.country + ')';
+	document.getElementById("ccc").innerHTML = ipdetails.country_calling_code;
+	document.getElementById("curr").innerHTML = ipdetails.currency;
+	document.getElementById("latlon").innerHTML = ipdetails.latitude + ', ' + ipdetails.longitude;
+	document.getElementById("orga").innerHTML = ipdetails.org;
+	document.getElementById("ipad").innerHTML = ipdetails.ip;
+	document.getElementById("region").innerHTML = ipdetails.region + ' (' + ipdetails.region_code + ')';
+	document.getElementById("timezone").innerHTML = ipdetails.timezone + ' (' + ipdetails.utc_offset + ')';
+	document.getElementById("zipcode").innerHTML = ipdetails.postal;
   }
 }
 
