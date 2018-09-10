@@ -14,6 +14,7 @@
     <script type="text/javascript" src="../js/pnr-status.js"></script>
     <link rel="stylesheet" href="../css/style.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/css/gcse-style.css">
     <noscript>
         <META HTTP-EQUIV="Refresh" CONTENT="0;URL=../jsDisabledErrorPage.html">
     </noscript>
@@ -37,9 +38,26 @@
                 <li class="nav-item"><a class="fa fa-envelope-o nav-link btn-dark" href="../pages/contact.html">&nbsp; Contact</a></li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-outline-info my-2 my-sm-0" type="button">Search</button>
-            </form>
+		<div id="search-box">
+			<script>
+				(function() {
+					var cx = "016951690685532780152:q1lkxnrrlme";
+					var gcse = document.createElement("script");
+					gcse.type = "text/javascript";
+					gcse.async = true;
+					gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
+					var s = document.getElementsByTagName("script")[0];
+					s.parentNode.insertBefore(gcse, s);
+				})();
+				window.onload = function() { 
+					var searchBox =  document.getElementById("gsc-i-id1");
+					searchBox.placeholder="Search Trickzas...";
+					searchBox.title="Search webslake"; 
+				}
+			</script>
+			<gcse:search></gcse:search>
+		</div>
+	   </form>
         </div>
     </nav>
     <div class="content">
