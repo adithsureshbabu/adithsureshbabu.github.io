@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
+footer {
+	background-color: #212121;
+	color: white;
+	text-align: center;
+	padding:1.5% 1.5%;
+}
+footer a {
+	text-decoration:none;
+	color:darkorange;
+}
+
+footer a:hover {
+	color:orange;
+	text-decoration:underline;
+}
+</style>
+</head>
+<body>
+<script>
+window.onload = getYear;
+function getYear() {document.getElementById("currentYear").innerHTML = (new Date()).getFullYear();}
+
+function loadCssIfNotLoaded(url) {
+	var element=document.querySelectorAll('link[href="' + url + '"]');
+	if (element.length == 0)
+	{
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.href = url;
+		document.getElementsByTagName("head")[0].appendChild(link);
+	}
+}
+
+loadCssIfNotLoaded('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+</script>
+<footer>
+	<div>Copyright <span class="fa fa-copyright"></span> <span id="currentYear"></span> | <a href="./index.html">TRICKZAS</a></div>
+</footer>
+</body>
+</html>
