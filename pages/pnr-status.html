@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Indian Railway PNR Status  - [TRICKZAS]</title>
+    <title>Indian Railway PNR Status|TRICKZAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" href="../images/favicon2_trickzas.png">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
@@ -14,52 +14,20 @@
     <script type="text/javascript" src="../js/pnr-status.js"></script>
     <link rel="stylesheet" href="../css/style.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="/css/gcse-style.css">
+	<link rel="stylesheet" href="../css/gcse-style.css">
     <noscript>
         <META HTTP-EQUIV="Refresh" CONTENT="0;URL=../jsDisabledErrorPage.html">
     </noscript>
 </head>
-
+<script>
+$(function() {
+	$('#header').load('header.html');
+	$('#footer').load('footer.html');
+	
+});
+</script>
 <body onload="urlQr();">
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <a id="pagetitle" class="navbar-brand" href="../index.html">TRICKZAS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav bg-dark mr-auto">
-                <li class="nav-item"><a class="fa fa-home nav-link btn-dark" href="../index.html">&nbsp; Home </a></li>
-                <li class="nav-item dropdown"><a class="fa fa-snowflake-o nav-link dropdown-toggle btn-dark" href="#" id="navbardrop" data-toggle="dropdown">&nbsp; Tools</a>
-                    <ul class="dropdown-menu">
-                        <a class="dropdown-item" href="../pages/ip-details.html">IP Details</a>
-                        <a class="dropdown-item" href="../pages/pnr-status.html">PNR Status</a>
-                    </ul>
-                </li>
-                <li class="nav-item"><a class="fa fa-cube nav-link btn-dark" href="https://trickzas.blogspot.com/">&nbsp; Blog</a></li>
-                <li class="nav-item"><a class="fa fa-ioxhost nav-link btn-dark" href="../pages/about.html">&nbsp; About</a></li>
-                <li class="nav-item"><a class="fa fa-envelope-o nav-link btn-dark" href="../pages/contact.html">&nbsp; Contact</a></li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-		<div id="search-box">
-			<script>
-				(function() {
-					var cx = "016951690685532780152:q1lkxnrrlme";
-					var gcse = document.createElement("script");
-					gcse.type = "text/javascript";
-					gcse.async = true;
-					gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
-					var s = document.getElementsByTagName("script")[0];
-					s.parentNode.insertBefore(gcse, s);
-				})();
-				window.onload = function() { 
-					var searchBox =  document.getElementById("gsc-i-id1");
-					searchBox.placeholder="Search Trickzas...";
-					searchBox.title="Search webslake"; 
-				}
-			</script>
-			<gcse:search></gcse:search>
-		</div>
-	   </form>
-        </div>
-    </nav>
+    <div id="header"></div>
     <div class="content">
         <br/>
         <div class="box-with-shadows container">
@@ -134,9 +102,7 @@
         </div>
         <br/>
     </div>
-    <footer>
-        <div>Copyright © 2018 - <a href="../index.html">TRICKZAS</a></div>
-    </footer>
+    <div id="footer"></div>
 </body>
 
 </html>
