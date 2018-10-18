@@ -3,7 +3,7 @@
 <head>
     <title>About|TRICKZAS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="../images/favicon2_trickzas.png">
+	<link rel="icon" href="https://raw.githubusercontent.com/adithsuresh5/adithsuresh5.github.io/master/images/logo.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -21,14 +21,34 @@ $(function() {
 	
 });
 </script>
+<style>
+@media screen and (max-width: 991px) {
+	#img1 {
+		width:100%; 
+		height:45%;
+	}
+}
+@media screen and (max-width: 600px) {
+	#img1 {
+		width:100%; 
+		height:30%;
+	}
+}
+@media screen and (min-width: 992px) {
+	#img1 {
+		width:70vw; 
+		height:45vh;
+	}
+}
+</style>
 </head>
 
 <body>
     <div id="header"></div>
     <div class="content">
 			<br/><br/>
-			<center><img src="../images/img1.png" style="width:70vw; height:45vh" /><br/></center>
-			<h3 align="center">
+			<center><img id="img1" src="../images/img1.png" /><br/></center>
+			<h4 align="center">
 			<br/>
 			A Website/Blog that helps people with tips, tricks and tech updates.
 			Trickzas is a site dedicated to people which helps with tips, tricks, and technology updates. 
@@ -37,7 +57,7 @@ $(function() {
 			All the tips and tutorials published here are professionally crafted and easy to use. 
 			I also have a passion to play with coding. As a result of this I started creating applications,
 			and other things and provide for our users completely free of cost.
-			</h1>
+			</h4>
     </div>
 	<br/><br/>
     <div id="footer"></div>
