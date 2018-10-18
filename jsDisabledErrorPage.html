@@ -1,63 +1,40 @@
 <html>
-
 <head>
-    <title>TRICKZAS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" href="/images/favicon2_trickzas.png">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-	<link rel="stylesheet" href="/css/gcse-style.css">
+<title>Error - Unable to run JavaScript!</title>
+<style>
+	.no-script {
+		color:#AA4241;
+		background-color:#f2dedf;
+		width:80%;
+		padding:1%;
+		font-size:4vmax;
+		text-align:center;
+		border:1px solid #e096a2;
+		border-radius:10px;	
+		position: relative;
+		float: left;
+		top: 40%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+		-moz-box-shadow: 1px 2px 4px rgba(0, 0, 0,0.5);
+		-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	}
+	a {
+		text-decoration:none;
+		color:crimson;
+	}
+	a:hover {
+		text-decoration:underline;
+		color:crimson;
+	}
+</style>
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <a id="pagetitle" class="navbar-brand" href="/index.html">TRICKZAS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav bg-dark mr-auto">
-                <li class="nav-item"><a class="nav-link btn-dark" href="/index.html">Home</a></li>
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle btn-dark" href="#" id="navbardrop" data-toggle="dropdown">Tools</a>
-                    <ul class="dropdown-menu">
-                        <a class="dropdown-item" href="/pages/ip-details.html">IP Details</a>
-                        <a class="dropdown-item" href="/pages/pnr-status.html">PNR Status</a>
-                    </ul>
-                </li>
-                <li class="nav-item"><a class="nav-link btn-dark" href="https://trickzas.blogspot.com/">Blog</a></li>
-                <li class="nav-item"><a class="nav-link btn-dark" href="/pages/about.html">About</a></li>
-                <li class="nav-item"><a class="nav-link btn-dark" href="/pages/contact.html">Contact</a></li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <div id="search-box">
-					<script>
-						(function() {
-							var cx = "016951690685532780152:q1lkxnrrlme";
-							var gcse = document.createElement("script");
-							gcse.type = "text/javascript";
-							gcse.async = true;
-							gcse.src = "https://cse.google.com/cse.js?cx=" + cx;
-							var s = document.getElementsByTagName("script")[0];
-							s.parentNode.insertBefore(gcse, s);
-						})();
-						window.onload = function() { 
-							var searchBox =  document.getElementById("gsc-i-id1");
-							searchBox.placeholder="Search Trickzas...";
-							searchBox.title="Search webslake"; 
-						}
-					</script>
-					<gcse:search></gcse:search>
-				</div>
-            </form>
-        </div>
-    </nav>
-    <div class="content">
-	<p id="js-load-err" class="container alert alert-danger center-page error-text">Javascript is disabled. Please enable java script in your browser and click <a href="/index.html">HERE.</a></p>
-    </div>
-    <footer>
-        <div>Copyright © 2018 - <a href="/index.html">TRICKZAS</a></div>
-    </footer>
+	<p class="no-script" >JavaScript is disabled, please enable JavaScript.</p>
+	<meta http-equiv="refresh" content="5">
+<script>
+window.history.go(-1);
+</script>
 </body>
-
 </html>
