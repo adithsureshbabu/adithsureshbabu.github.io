@@ -1,0 +1,115 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <a id="pagetitle" class="navbar-brand" href="./index.html"><img src="https://raw.githubusercontent.com/adithsuresh5/adithsuresh5.github.io/master/images/logo.png" alt="logo" style="width:40px;"> TRICKZAS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav bg-dark ml-auto">
+                <li class="nav-item"><a id="home" class="active nav-link btn-dark" href="./index.html"><span class="fa fa-home"></span>&nbsp; Home </a></li>
+                <li class="nav-item dropdown"><a id="tools" class="nav-link dropdown-toggle btn-dark" href="#" id="navbardrop" data-toggle="dropdown"><span class="fa fa-snowflake-o"></span>&nbsp; Tools</a>
+                    <ul class="dropdown-menu">
+                        <a id="ipdetails" class="dropdown-item" href="./pages/ip-details.html">IP Details</a>
+                        <a id="pnrstatus" class="dropdown-item" href="./pages/pnr-status.html">PNR Status</a>
+                    </ul>
+                </li>
+                <li class="nav-item"><a id="blog" class="nav-link btn-dark" href="https://trickzas.blogspot.com/"><span class="fa fa-cube"></span>&nbsp; Blog</a></li>
+                <li class="nav-item"><a id="about" class="nav-link btn-dark" href="./pages/about.html"><span class="fa fa-ioxhost"></span>&nbsp; About</a></li>
+                <li class="nav-item"><a id="contact" class="nav-link btn-dark" href="./pages/contact.html"><span class="fa fa-envelope-o"></span>&nbsp; Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+<script>
+if(typeof jQuery=='undefined' || jQuery.fn.jquery!="3.3.1") 
+{
+	loadScript('https://code.jquery.com/jquery-3.3.1.min.js',loadJqueryDependantScripts);
+} 
+else 
+{
+	loadJqueryDependantScripts();
+}
+
+function loadScript(url,onloadfn) {
+	var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+	script.onload = onloadfn;
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+
+function loadJqueryDependantScripts() {	
+    loadScript('https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js');
+}
+
+function loadCssIfNotLoaded(url) {
+	var element=document.querySelectorAll('link[href="' + url + '"]');
+	if (element.length == 0)
+	{
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.href = url;
+		document.getElementsByTagName("head")[0].appendChild(link);
+	}
+}
+
+loadCssIfNotLoaded('https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css');
+loadCssIfNotLoaded('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+loadCssIfNotLoaded('./css/header.css');
+</script>
+<script>
+var lastsegmentpageurl = window.location.href.split('/')[window.location.href.split('/').length-1];
+
+(function(){
+	switch(lastsegmentpageurl) 
+	{
+		case "index.html":
+			while(document.getElementsByClassName('active').length > 0){
+				document.getElementsByClassName('active')[0].classList.remove('active');
+			}
+			document.getElementById("home").classList.add("active");
+		break;
+		
+		case "pnr-status.html":
+			while(document.getElementsByClassName('active').length > 0){
+				document.getElementsByClassName('active')[0].classList.remove('active');
+			}
+			document.getElementById("tools").classList.add("active");
+			document.getElementById("pnrstatus").classList.add("active");
+		break;
+		
+		case "ip-details.html":
+			while(document.getElementsByClassName('active').length > 0){
+				document.getElementsByClassName('active')[0].classList.remove('active');
+			}
+			document.getElementById("tools").classList.add("active");
+			document.getElementById("ipdetails").classList.add("active");
+		break;
+		
+		case "about.html":
+			while(document.getElementsByClassName('active').length > 0){
+				document.getElementsByClassName('active')[0].classList.remove('active');
+			}
+			document.getElementById("about").classList.add("active");
+		break;
+		
+		case "contact.html":
+			while(document.getElementsByClassName('active').length > 0){
+				document.getElementsByClassName('active')[0].classList.remove('active');
+			}
+			document.getElementById("contact").classList.add("active");
+		break;
+				
+		default: 
+			while(document.getElementsByClassName('active').length > 0){
+				document.getElementsByClassName('active')[0].classList.remove('active');
+			}
+			document.getElementById("home").classList.add("active");
+		break;
+	}
+})();
+</script>
+</body>
+</html>
