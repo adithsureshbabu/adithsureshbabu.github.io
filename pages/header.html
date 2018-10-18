@@ -13,6 +13,7 @@
                     <ul class="dropdown-menu">
                         <a id="ipdetails" class="dropdown-item" href="../pages/ip-details.html">IP Details</a>
                         <a id="pnrstatus" class="dropdown-item" href="../pages/pnr-status.html">PNR Status</a>
+						<a id="flames" class="dropdown-item" href="/flames-calculator">Flames game</a>
                     </ul>
                 </li>
                 <li class="nav-item"><a id="blog" class="nav-link btn-dark" href="https://trickzas.blogspot.com/"><span class="fa fa-cube"></span>&nbsp; Blog</a></li>
@@ -109,6 +110,14 @@ var lastsegmentpageurl = window.location.href.split('/')[window.location.href.sp
 			document.getElementById("home").classList.add("active");
 		break;
 	}
+})();
+
+(function() {
+    var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = 'https://raw.githubusercontent.com/adithsuresh5/adithsuresh5.github.io/master/images/logo.png';
+    document.getElementsByTagName('head')[0].appendChild(link);
 })();
 </script>
 </body>
