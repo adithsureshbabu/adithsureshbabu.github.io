@@ -61,7 +61,7 @@ loadCssIfNotLoaded('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/cs
 loadCssIfNotLoaded('./css/header.css');
 </script>
 <script>
-var lastsegmentpageurl = window.location.href.split('/')[window.location.href.split('/').length-1];
+var lastsegmentpageurl = window.location.href.split('?')[0].split('/')[window.location.href.split('?')[0].split('/').length-1];
 
 (function(){
 	switch(lastsegmentpageurl) 
