@@ -38,6 +38,12 @@ function gotData(data) {
   }
 }
 
+window.onload = function () {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://api.ipify.org?format=jsonp&callback=ipv4";
+        document.getElementsByTagName("head")[0].appendChild(script);
+};
 function ipv4(response) {
 	var ipv4= response.ip;
 	document.getElementById("ipadv4").innerHTML=ipv4;
