@@ -12,6 +12,7 @@ function setup() {
 
 function refresh() {
   setTimeout(ipAsk,500);
+  setTimeout(ipv4,500);
 
 }
 
@@ -35,6 +36,11 @@ function gotData(data) {
 	document.getElementById("timezone").innerHTML = ipdetails.timezone + ' (' + ipdetails.utc_offset + ')';
 	document.getElementById("zipcode").innerHTML = ipdetails.postal;
   }
+}
+
+function ipv4(response) {
+	var ipv4= response.ip;
+	document.getElementById("ipadv4").innerHTML=ipv4;
 }
 
 function removeDummy() {
