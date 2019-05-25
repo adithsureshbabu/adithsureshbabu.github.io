@@ -34,8 +34,12 @@
                 <tr>
                     <th colspan=2 class="bg-dark" style="color:white;">Your IP Details: </th>
                 </tr>
-				<tr>
-                    <th class="table-warning">IP Address</th>
+		<tr>
+                    <th class="table-warning">IP Address (IPv4)</th>
+                    <td id="ipadv4"></td>
+                </tr>
+		<tr>
+                    <th class="table-warning">IP Address (IPv6)</th>
                     <td id="ipad"></td>
                 </tr>
                 <tr>
@@ -87,6 +91,14 @@
         <br/>
         <br/>
     </div>
+	
+<script type="text/javascript">
+	function ipv4(response) {
+		var ipv4= response.ip;
+		document.getElementById("ipadv4").innerHTML=ipv4;
+	}
+</script>
+<script type="text/javascript" src="https://api.ipify.org?format=jsonp&callback=ipv4"></script>
 	
 <div id="loading">	
 	<div class="bg_load"></div>
