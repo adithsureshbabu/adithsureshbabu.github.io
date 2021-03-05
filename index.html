@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <title>Index of /adithsuresh_github_pages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	  <link rel="icon" href="./images/logo.png" type="image/png">
+    <style>
+      #content {
+        display: none;
+      }
+      a {
+        text-decoration: none;
+      }
+      a:hover {
+        color: red;
+        text-decoration: underline;
+      }
+      a:active {
+        color: crimson;
+      }
+      thead {
+        font-weight: bold;
+      }
+      table,
+      th,
+      tr,
+      td {
+        margin-right: 5%;
+        margin-left: 5%;
+
+        border: 2px solid #ddd;
+        padding: 2px;
+      }
+      table {
+        width: 90%;
+      }
+      .table-hoverable tbody tr:hover {
+        background-color: #f2f2f2;
+      }
+      .rc-table {
+        border-collapse: separate;
+        border-spacing: 0px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        padding: 4px;
+      }
+      .rc-cell {
+        border-collapse: separate;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        padding: 4px;
+      }
+      .th-bg {
+        background-color: #007bff;
+        color: white;
+      }
+      h1 {
+        color: #007bff;
+      }
+    </style>
+    <script>
+      function getData() {
+        document.getElementById("content").style.display = "block";
+        var api = "https://api.github.com/users/adithsuresh/repos";
+        fetch(api)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            var tbody = document.querySelector("#files-list");
+            for (i = data.length - 1; i >= 0; i--) {
+              if (data[i].homepage) {
+                var td = tbody.insertRow(0);
+                td.insertCell(0).innerHTML = `<a href="${data[i].homepage}" target="_blank">${data[i].name}</a>`;
+                tbody.rows[0].cells[0].className = "rc-cell";
+                td.insertCell(1).innerHTML = data[i].description;
+                tbody.rows[0].cells[1].className = "rc-cell";
+              }
+            }
+          });
+      }
+    </script>
+  </head>
+  <body onload="getData();">
+    <noscript>
+      <style>
+        .no-script {
+          color: #aa4241;
+          background-color: #f2dedf;
+          padding: 1%;
+          font-size: 4vmax;
+          text-align: center;
+          border: 1px solid #e096a2;
+          border-radius: 10px;
+          position: relative;
+          float: left;
+          top: 40%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+          -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+          -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+      </style>
+      <p class="no-script">JavaScript is disabled, please enable JavaScript.</p>
+      <meta http-equiv="refresh" content="10" />
+    </noscript>
+    <div id="content">
+      <meta http-equiv="refresh" content="300" />
+      <h1>Index of /adithsuresh_github_pages</h1>
+      <table class="table-hoverable rc-table">
+        <thead class="th-bg">
+          <tr>
+            <td class="rc-cell" style="min-width: 60%">REPO</td>
+            <td class="rc-cell" style="min-width: 20%">DESCRIPTION</td>
+          </tr>
+        </thead>
+        <tbody id="files-list"></tbody>
+      </table>
+    </div>
+  </body>
+</html>
