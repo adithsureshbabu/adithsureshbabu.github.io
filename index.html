@@ -75,7 +75,7 @@
                 td.insertCell(0).innerHTML = `<a href="${data[i].homepage}" target="_blank">${data[i].name}</a>`;
                 tbody.rows[0].cells[0].className = "rc-cell";
 	        if (!data[i].description) {
-	          data[i].description === 'No Description';
+	          data[i].description = 'No Description';
 	        }
                 td.insertCell(1).innerHTML = data[i].description;
                 tbody.rows[0].cells[1].className = "rc-cell";
