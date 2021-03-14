@@ -39,10 +39,10 @@ function loadCssIfNotLoaded(url) {
 
 loadCssIfNotLoaded('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 	
-function removeElementsAfterFooter() {
-  let elementsAfterFooter = document.querySelectorAll("body *");
-  for (let i = elementsAfterFooter.length - 1; i > 0; i--) {
-    const element = elementsAfterFooter[i];
+function hideElementsAfterFooter() {
+  let allParentElements = document.querySelectorAll('body > *');
+  for (let i = allParentElements.length - 1; i > 0; i--) {
+    const element = allParentElements[i];
     if (element.id && element.id.includes("footer")) {
       break;
     }
@@ -53,7 +53,7 @@ function removeElementsAfterFooter() {
 window.addEventListener("load", function () {
   try {
     setTimeout(() => {
-      removeElementsAfterFooter()
+      hideElementsAfterFooter()
     }, 500);
     let date = new Date();
     document.querySelector("#currentYear").innerHTML = date.getFullYear();
