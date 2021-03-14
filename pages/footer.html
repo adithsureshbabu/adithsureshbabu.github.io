@@ -26,9 +26,6 @@ footer a:hover {
 </head>
 <body>
 <script>
-window.onload = getYear;
-function getYear() {document.getElementById("currentYear").innerHTML = (new Date()).getFullYear();}
-
 function loadCssIfNotLoaded(url) {
 	var element=document.querySelectorAll('link[href="' + url + '"]');
 	if (element.length == 0)
@@ -41,16 +38,17 @@ function loadCssIfNotLoaded(url) {
 }
 
 loadCssIfNotLoaded('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+	
 window.addEventListener("load", function () {
   try {
     setTimeout(() => {
-      let uselessTag = document.querySelector(".betternet-wrapper");
-      if (uselessTag) {
-        uselessTag.remove();
+      let betternetWrapper = document.querySelector(".betternet-wrapper");
+      if (betternetWrapper) {
+        betternetWrapper.style.display = "none";
       }
-      let date = new Date();
-      document.querySelector("#currentYear").innerHTML = date.getFullYear();
     }, 500);
+    let date = new Date();
+    document.querySelector("#currentYear").innerHTML = date.getFullYear();
   } catch (err) {
     console.log(err);
   }
