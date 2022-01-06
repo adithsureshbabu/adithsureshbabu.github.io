@@ -16,10 +16,10 @@
       var indexpath = "";
       if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
       else indexpath = window.location.hostname;
-      document.title = "Index of /" + indexpath;
+      document.title = "Index of " + indexpath;
       var title_interval = setInterval(() => {
         if (document.readyState !== "complete") return;
-        document.getElementsByClassName("title")[0].innerText = "Index of /" + indexpath;
+        document.getElementsByClassName("title")[0].innerText = "Index of " + indexpath;
         clearInterval(title_interval);
       }, 100);
     </script>
