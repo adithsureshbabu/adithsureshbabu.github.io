@@ -12,30 +12,22 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="shortcut icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-    <script>
-      var indexpath = "";
-      if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
-      else indexpath = window.location.hostname;
-      document.title = "Index of " + indexpath;
-      var title_interval = setInterval(() => {
-        if (document.readyState !== "complete") return;
-        document.getElementsByClassName("title")[0].innerText = "Index of " + indexpath;
-        clearInterval(title_interval);
-      }, 100);
-    </script>
     <style>
+      * {
+        font-family: sans-serif;
+      }
       #content {
         display: none;
       }
       a {
         text-decoration: none;
       }
+      a:active,
       a:hover {
-        color: red;
-        text-decoration: underline;
-      }
-      a:active {
         color: crimson;
+      }
+      a:hover {
+        text-decoration: underline;
       }
       thead {
         font-weight: bold;
@@ -44,10 +36,8 @@
       th,
       tr,
       td {
-        margin-right: 5%;
-        margin-left: 5%;
-
-        border: 2px solid #ddd;
+        margin: 0 auto;
+        border: 2px solid #dddddd;
         padding: 2px;
       }
       table {
@@ -59,14 +49,14 @@
       .rc-table {
         border-collapse: separate;
         border-spacing: 0px;
-        border: 2px solid #ddd;
+        border: 2px solid #dddddd;
         border-radius: 5px;
         -moz-border-radius: 5px;
         padding: 4px;
       }
       .rc-cell {
         border-collapse: separate;
-        border: 2px solid #ddd;
+        border: 2px solid #dddddd;
         border-radius: 5px;
         -moz-border-radius: 5px;
         padding: 4px;
@@ -75,41 +65,65 @@
         background-color: #007bff;
         color: white;
       }
-      h1 {
+      h2.title {
         color: #007bff;
         word-wrap: break-word;
       }
     </style>
     <script>
-      function getData() {
-        document.getElementById("content").style.display = "block";
-        var api = "https://api.github.com/users/adithsuresh/repos";
+      let docLoad = setInterval(() => {
+        if (document.readyState !== "complete") return;
+        getData();
+        clearInterval(docLoad);
+      }, 100);
+      const getData = () => {
+        const api = "https://api.github.com/users/adithsuresh/repos";
         fetch(api)
-          .then((response) => {
-            return response.json();
-          })
+          .then((res) => res.json())
           .then((data) => {
-            var tbody = document.querySelector("#files-list");
-            for (i = data.length - 1; i >= 0; i--) {
-              if (data[i].homepage) {
-                if (data[i].name == window.location.host) {
-                  continue;
+            let tbody = document.querySelector("#files-list");
+            if (!data.length || data.length < 1) {
+              let td = tbody.insertRow(0);
+              td.insertCell(0).innerText = "No Data";
+              td.style.textAlign = "center";
+              tbody.rows[0].cells[0].className = "rc-cell";
+              tbody.rows[0].cells[0].colSpan = 2;
+            } else {
+              for (i = data.length - 1; i >= 0; i--) {
+                if (data[i].homepage) {
+                  if (data[i].name === window.location.host) {
+                    continue;
+                  }
+                  let td = tbody.insertRow(0);
+                  let a = document.createElement("a");
+                  a.href = data[i].homepage;
+                  a.target = "_blank";
+                  a.innerText = data[i].name;
+                  td.insertCell(0).appendChild(a);
+                  tbody.rows[0].cells[0].className = "rc-cell";
+                  if (!data[i].description) {
+                    data[i].description = "-";
+                  }
+                  td.insertCell(1).innerText = data[i].description;
+                  tbody.rows[0].cells[1].className = "rc-cell";
                 }
-                var td = tbody.insertRow(0);
-                td.insertCell(0).innerHTML = `<a href="${data[i].homepage}" target="_blank">${data[i].name}</a>`;
-                tbody.rows[0].cells[0].className = "rc-cell";
-                if (!data[i].description) {
-                  data[i].description = "-";
-                }
-                td.insertCell(1).innerHTML = data[i].description;
-                tbody.rows[0].cells[1].className = "rc-cell";
               }
             }
+            document.querySelector("#content").style.display = "block";
+          })
+          .catch((err) => {
+            let tbody = document.querySelector("#files-list");
+            let td = tbody.insertRow(0);
+            td.insertCell(0).innerText = "No Data";
+            td.style.textAlign = "center";
+            tbody.rows[0].cells[0].className = "rc-cell";
+            tbody.rows[0].cells[0].colSpan = 2;
+            document.querySelector("#content").style.display = "block";
           });
-      }
+      };
     </script>
   </head>
-  <body onload="getData();">
+  <body>
     <noscript>
       <style>
         .no-script {
@@ -135,7 +149,7 @@
     </noscript>
     <div id="content">
       <meta http-equiv="refresh" content="300" />
-      <h1 class="title">Index of /</h1>
+      <h2 class="title">Index of /</h2>
       <table class="table-hoverable rc-table">
         <thead class="th-bg">
           <tr>
@@ -146,5 +160,13 @@
         <tbody id="files-list"></tbody>
       </table>
     </div>
+    <script>
+      let indexpath = "/";
+      if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
+      else indexpath = window.location.hostname;
+      let indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/")) + "/";
+      document.title = indexof;
+      document.querySelector(".title").innerText = indexof;
+    </script>
   </body>
 </html>
