@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Loading Animation</title>
+    <link rel="icon" href="/favicon-32x32.png" />
+    <link rel="stylesheet" href="./styles/loading.css" />
+    <noscript>
+      <meta http-equiv="Refresh" content="0;URL=./jsDisabledErrorPage.html" />
+    </noscript>
+    <script>
+      Object.prototype.fadeOut = function () {
+        if (!(typeof this === "object") || !this.style) return "Invalid Element";
+        var fadeTarget = this;
+        var fadeEffect = setInterval(function () {
+          if (!fadeTarget.style.opacity) fadeTarget.style.opacity = 1;
+          if (fadeTarget.style.opacity > 0) fadeTarget.style.opacity -= 0.1;
+          else clearInterval(fadeEffect);
+        }, 60);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="loading">
+      <div class="bg_load"></div>
+      <div class="bg_wrapper">
+        <div class="inner">
+          <span>L</span>
+          <span>o</span>
+          <span>a</span>
+          <span>d</span>
+          <span>i</span>
+          <span>n</span>
+          <span>g</span>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      window.onload = function () {
+        setTimeout(() => {
+          document.getElementById("loading").fadeOut("slow");
+        }, 2000);
+      };
+    </script>
+  </body>
+</html>
