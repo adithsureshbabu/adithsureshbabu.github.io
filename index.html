@@ -77,11 +77,14 @@
         clearInterval(docLoad);
       }, 100);
       const getData = () => {
-        const api = "https://api.github.com/users/adithsuresh/repos";
+        let repo = "adithsuresh";
+        if (window.location.hostname.split(".")[1] === "github") repo = window.location.hostname.split(".")[0];
+        let api = "https://api.github.com/users/" + repo + "/repos";
         fetch(api)
           .then((res) => res.json())
           .then((data) => {
             let tbody = document.querySelector("#files-list");
+            document.querySelector("#files-list").innerHTML = "";
             if (!data.length || data.length < 1) {
               let td = tbody.insertRow(0);
               td.insertCell(0).innerText = "No Data";
@@ -113,6 +116,7 @@
           })
           .catch((err) => {
             let tbody = document.querySelector("#files-list");
+            document.querySelector("#files-list").innerHTML = "";
             let td = tbody.insertRow(0);
             td.insertCell(0).innerText = "No Data";
             td.style.textAlign = "center";
