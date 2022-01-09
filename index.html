@@ -71,59 +71,70 @@
       }
     </style>
     <script>
-      let docLoad = setInterval(() => {
+      var docLoad = setInterval(function () {
         if (document.readyState !== "complete") return;
         getData();
         clearInterval(docLoad);
       }, 100);
-      const getData = () => {
-        let repo = "adithsuresh";
+      var getData = function () {
+        var repo = "adithsuresh";
         if (window.location.hostname.split(".")[1] === "github") repo = window.location.hostname.split(".")[0];
-        let api = "https://api.github.com/users/" + repo + "/repos";
-        fetch(api)
-          .then((res) => res.json())
-          .then((data) => {
-            let tbody = document.querySelector("#files-list");
-            document.querySelector("#files-list").innerHTML = "";
-            if (!data.length || data.length < 1) {
-              let td = tbody.insertRow(0);
-              td.insertCell(0).innerText = "No Data";
-              td.style.textAlign = "center";
-              tbody.rows[0].cells[0].className = "rc-cell";
-              tbody.rows[0].cells[0].colSpan = 2;
-            } else {
-              for (i = data.length - 1; i >= 0; i--) {
-                if (data[i].homepage) {
-                  if (data[i].name === window.location.host) {
-                    continue;
-                  }
-                  let td = tbody.insertRow(0);
-                  let a = document.createElement("a");
-                  a.href = data[i].homepage;
-                  a.target = "_blank";
-                  a.innerText = data[i].name;
-                  td.insertCell(0).appendChild(a);
-                  tbody.rows[0].cells[0].className = "rc-cell";
-                  if (!data[i].description) {
-                    data[i].description = "-";
-                  }
-                  td.insertCell(1).innerText = data[i].description;
-                  tbody.rows[0].cells[1].className = "rc-cell";
-                }
+        var api = "https://api.github.com/users/" + repo + "/repos";
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState !== 4) return;
+          if (xhr.status >= 200 && xhr.status < 300) {
+            var data = JSON.parse(xhr.responseText);
+            processData(data);
+          } else {
+            processError();
+          }
+        };
+        xhr.open("GET", api);
+        xhr.onerror = function (err) {
+          processError(err);
+        };
+        xhr.send();
+      };
+
+      var processData = function (data) {
+        var tbody = document.getElementById("files-list");
+        document.getElementById("files-list").innerHTML = "";
+        if (!data.length || data.length < 1) {
+          processError();
+        } else {
+          for (i = data.length - 1; i >= 0; i--) {
+            if (data[i].homepage) {
+              if (data[i].name === window.location.host) {
+                continue;
               }
+              var td = tbody.insertRow(0);
+              var a = document.createElement("a");
+              a.href = data[i].homepage;
+              a.target = "_blank";
+              a.innerText = data[i].name;
+              td.insertCell(0).appendChild(a);
+              tbody.rows[0].cells[0].className = "rc-cell";
+              if (!data[i].description) {
+                data[i].description = "-";
+              }
+              td.insertCell(1).innerText = data[i].description;
+              tbody.rows[0].cells[1].className = "rc-cell";
             }
-            document.querySelector("#content").style.display = "block";
-          })
-          .catch((err) => {
-            let tbody = document.querySelector("#files-list");
-            document.querySelector("#files-list").innerHTML = "";
-            let td = tbody.insertRow(0);
-            td.insertCell(0).innerText = "No Data";
-            td.style.textAlign = "center";
-            tbody.rows[0].cells[0].className = "rc-cell";
-            tbody.rows[0].cells[0].colSpan = 2;
-            document.querySelector("#content").style.display = "block";
-          });
+          }
+        }
+        document.getElementById("content").style.display = "block";
+      };
+
+      var processError = function (err) {
+        var tbody = document.getElementById("files-list");
+        document.getElementById("files-list").innerHTML = "";
+        var td = tbody.insertRow(0);
+        td.insertCell(0).innerText = "No Data";
+        td.style.textAlign = "center";
+        tbody.rows[0].cells[0].className = "rc-cell";
+        tbody.rows[0].cells[0].colSpan = 2;
+        document.getElementById("content").style.display = "block";
       };
     </script>
   </head>
@@ -170,12 +181,12 @@
       </table>
     </div>
     <script>
-      let indexpath = "/";
+      var indexpath = "/";
       if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
       else indexpath = window.location.hostname;
-      let indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/")) + "/";
+      var indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/")) + "/";
       document.title = indexof;
-      document.querySelector(".title").innerText = indexof;
+      document.getElementsByClassName("title")[0].innerText = indexof;
     </script>
   </body>
 </html>
