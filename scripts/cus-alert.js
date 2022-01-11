@@ -11,7 +11,7 @@
     window.alert = function () {
       var alertInterval = setInterval(() => {
         if (!window.alertVisible) {
-          cusAlert(arguments[0], arguments[1]);
+          cusAlert(arguments[0], arguments[1], arguments[2]);
           clearInterval(alertInterval);
         }
       }, 50);
@@ -20,6 +20,16 @@
     console.log(err);
   }
 })(window);
+
+Object.prototype.querySelectAll = function (query, callback) {
+  var elements = this.querySelectorAll(query);
+  if (typeof callback == "function") {
+    for (var i = 0; i < elements.length; ++i) {
+      callback.call(elements[i], elements[i], i);
+    }
+  }
+  return elements;
+};
 
 Object.prototype.fadeOut = function (speed, removeElement) {
   try {
@@ -72,8 +82,8 @@ Object.prototype.fadeIn = function (speed, removeElement) {
 function cusAlert() {
   try {
     window.alertVisible = true;
-    var divAlert = document.getElementsByClassName("cus-alert")[0];
-    var divAlertMask = document.getElementsByClassName("cus-alert-mask")[0];
+    var divAlert = document.querySelectorAll(".cus-alert")[0];
+    var divAlertMask = document.querySelectorAll(".cus-alert-mask")[0];
     if (divAlert) divAlert.parentElement.removeChild(divAlert);
     if (divAlertMask) divAlertMask.parentElement.removeChild(divAlertMask);
     if (arguments[0] !== undefined)
@@ -110,15 +120,39 @@ function cusAlert() {
         divElements = [];
       }
     }
-    divAlert.getElementsByClassName("cus-alert-btn")[0].addEventListener("click", function () {
+    if (arguments[2] === "dark") {
+      divAlert.style.backgroundColor = "#292a2d";
+      divAlert.querySelectAll(".cus-alert *", function (el) {
+        el.style.color = "#e8eaed";
+      });
+      divAlert.querySelector(".cus-alert-btn").style.color = "#8ab4f8";
+      divAlert.querySelector(".cus-alert-btn").style.borderTop = "1px solid #555555";
+      divAlert.querySelectAll(".cus-alert .cus-alert-btn", function (el) {
+        el.addEventListener(
+          "mousedown",
+          function () {
+            el.style.background = "#333333";
+          },
+          false
+        );
+        document.addEventListener(
+          "mouseup",
+          function () {
+            el.style.background = "#292a2d";
+          },
+          false
+        );
+      });
+    }
+    divAlert.querySelectorAll(".cus-alert-btn")[0].addEventListener("click", function () {
       divAlert.fadeOut(null, true);
       divAlertMask.fadeOut(null, true);
       setTimeout(() => {
         window.alertVisible = false;
       }, 200);
     });
-    document.getElementsByTagName("body")[0].appendChild(divAlertMask);
-    document.getElementsByTagName("body")[0].appendChild(divAlert);
+    document.querySelectorAll("body")[0].appendChild(divAlertMask);
+    document.querySelectorAll("body")[0].appendChild(divAlert);
     divAlert.fadeIn();
     divAlertMask.fadeIn();
     return;
