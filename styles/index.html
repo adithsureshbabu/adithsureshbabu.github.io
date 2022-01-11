@@ -7,7 +7,6 @@
     <title>Index of /styles</title>
     <meta name="google-site-verification" content="C6tra7qp9MtfyUZAX885levrTavCbgsoTpVa4Hve7Nc" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="index.html" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -75,70 +74,80 @@
         getData();
         clearInterval(docLoad);
       }, 100);
+
       function getData() {
         var api = "https://api.github.com/repositories/147058348/contents/styles";
-        fetch(api)
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            var tbody = document.querySelector("#files-list");
-            document.querySelector("#files-list").innerHTML = "";
-            if (!data.length || data.length < 1) {
-              let td = tbody.insertRow(0);
-              td.insertCell(0).innerText = "No Data";
-              td.style.textAlign = "center";
-              tbody.rows[0].cells[0].className = "rc-cell";
-              tbody.rows[0].cells[0].colSpan = 3;
-            } else {
-              for (i = data.length - 1; i >= 0; i--) {
-                var fsize, ftype, suffix;
-                if (data[i].size > 1024) {
-                  fsize = data[i].size / 1024;
-                  suffix = "KB";
-                } else if (data[i].size > 1048576) {
-                  fsize = data[i].size / 1024;
-                  suffix = "MB";
-                } else if (data[i].size > 1073741824) {
-                  fsize = data[i].size / 1024;
-                  suffix = "GB";
-                } else {
-                  fsize = data[i].size;
-                  suffix = "B";
-                }
-                if (data[i].name != "index.html" && data[i].name != "index.htm") {
-                  var td = tbody.insertRow(0);
-                  var a = document.createElement("a");
-                  a.target = "_blank";
-                  a.innerText = data[i].name;
-                  if (data[i].type == "dir") {
-                    a.href = "./" + data[i].name + "/";
-                  } else {
-                    a.href = "./" + data[i].name;
-                  }
-                  td.insertCell(0).appendChild(a);
-                  tbody.rows[0].cells[0].className = "rc-cell";
-                  td.insertCell(1).innerText = data[i].type;
-                  tbody.rows[0].cells[1].className = "rc-cell";
-
-                  td.insertCell(2).innerText = fsize.toFixed(2) + suffix;
-                  tbody.rows[0].cells[2].className = "rc-cell";
-                }
-              }
-            }
-            document.querySelector("#content").style.display = "block";
-          })
-          .catch((err) => {
-            let tbody = document.querySelector("#files-list");
-            document.querySelector("#files-list").innerHTML = "";
-            let td = tbody.insertRow(0);
-            td.insertCell(0).innerText = "No Data";
-            td.style.textAlign = "center";
-            tbody.rows[0].cells[0].className = "rc-cell";
-            tbody.rows[0].cells[0].colSpan = 3;
-            document.querySelector("#content").style.display = "block";
-          });
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState !== 4) return;
+          if (xhr.status >= 200 && xhr.status < 300) {
+            var data = JSON.parse(xhr.responseText);
+            processData(data);
+          } else {
+            processError();
+          }
+        };
+        xhr.open("GET", api);
+        xhr.onerror = function (err) {
+          processError(err);
+        };
+        xhr.send();
       }
+
+      var processData = function (data) {
+        var tbody = document.querySelector("#files-list");
+        document.querySelector("#files-list").innerHTML = "";
+        if (!data.length || data.length < 1) {
+          processError();
+        } else {
+          for (i = data.length - 1; i >= 0; i--) {
+            var fsize, ftype, suffix;
+            if (data[i].size > 1024) {
+              fsize = data[i].size / 1024;
+              suffix = "KB";
+            } else if (data[i].size > 1048576) {
+              fsize = data[i].size / 1024;
+              suffix = "MB";
+            } else if (data[i].size > 1073741824) {
+              fsize = data[i].size / 1024;
+              suffix = "GB";
+            } else {
+              fsize = data[i].size;
+              suffix = "B";
+            }
+            if (data[i].name != "index.html" && data[i].name != "index.htm") {
+              var td = tbody.insertRow(0);
+              var a = document.createElement("a");
+              a.target = "_blank";
+              a.innerText = data[i].name;
+              if (data[i].type == "dir") {
+                a.href = "./" + data[i].name + "/";
+              } else {
+                a.href = "./" + data[i].name;
+              }
+              td.insertCell(0).appendChild(a);
+              tbody.rows[0].cells[0].className = "rc-cell";
+              td.insertCell(1).innerText = data[i].type;
+              tbody.rows[0].cells[1].className = "rc-cell";
+
+              td.insertCell(2).innerText = fsize.toFixed(2) + suffix;
+              tbody.rows[0].cells[2].className = "rc-cell";
+            }
+          }
+        }
+        document.querySelector("#content").style.display = "block";
+      };
+
+      var processError = function (err) {
+        var tbody = document.querySelector("#files-list");
+        document.querySelector("#files-list").innerHTML = "";
+        var td = tbody.insertRow(0);
+        td.insertCell(0).innerText = "No Data";
+        td.style.textAlign = "center";
+        tbody.rows[0].cells[0].className = "rc-cell";
+        tbody.rows[0].cells[0].colSpan = 3;
+        document.querySelector("#content").style.display = "block";
+      };
     </script>
   </head>
   <body>
@@ -167,7 +176,7 @@
     </noscript>
     <div id="content">
       <meta http-equiv="refresh" content="300" />
-      <h2 class="title">Index of /pages</h2>
+      <h2 class="title">Index of /styles</h2>
       <table class="table-hoverable rc-table">
         <thead class="th-bg">
           <tr>
@@ -180,10 +189,10 @@
       </table>
     </div>
     <script>
-      let indexpath = "/";
+      var indexpath = "/";
       if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
       else indexpath = window.location.hostname;
-      let indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/"));
+      var indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/"));
       document.title = indexof;
       document.querySelector(".title").innerText = indexof;
     </script>
