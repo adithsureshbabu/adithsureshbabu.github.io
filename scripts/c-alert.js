@@ -120,20 +120,19 @@ function cAlert(message, title, theme) {
       divAlert.querySelector(".c-alert-btn").style.color = "#8ab4f8";
       divAlert.querySelector(".c-alert-btn").style.borderTop = "1px solid #555555";
       divAlert.querySelectAll(".c-alert .c-alert-btn", function (el) {
-        el.addEventListener(
-          "mousedown",
-          function () {
-            el.style.background = "#333333";
-          },
-          false
-        );
-        document.addEventListener(
-          "mouseup",
-          function () {
-            el.style.background = "#292a2d";
-          },
-          false
-        );
+        var onclickstart = function () {
+          el.style.background = "#333333";
+          return;
+        };
+        var onclickend = function () {
+          el.style.background = "#292a2d";
+          return;
+        };
+        el.addEventListener("mousedown", onclickstart, false);
+        el.addEventListener("touchstart", onclickstart, false);
+        document.addEventListener("mouseup", onclickend, false);
+        document.addEventListener("touchmove", onclickend, false);
+        document.addEventListener("touchend", onclickend, false);
       });
     }
     divAlert.querySelectorAll(".c-alert-btn")[0].addEventListener("click", function () {
