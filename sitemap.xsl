@@ -79,7 +79,12 @@
 						table td:last-child {
 						  border-bottom: 0;
 						}
-					  }
+					}
+					@media screen and (max-width: 320px) {
+						table td {
+						  font-size: 0.7em;
+						}
+					}
 				</style>
 			</head>
 			<body>
