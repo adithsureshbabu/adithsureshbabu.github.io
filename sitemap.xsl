@@ -27,7 +27,7 @@
 						font-size:16px;
 						background-color:#CFEBF7;
 					}
-					tr.high {
+					tr._ {
 						background-color:#f5f5f5;
 					}
 					a {
@@ -49,7 +49,7 @@
 						<xsl:for-each select="sitemap:urlset/sitemap:url">
 							<tr>
 								<xsl:if test="position() mod 2 != 1">
-									<xsl:attribute name="class">high</xsl:attribute>
+									<xsl:attribute name="class">_</xsl:attribute>
 								</xsl:if>
 								<td>
 									<xsl:variable name="loc">
