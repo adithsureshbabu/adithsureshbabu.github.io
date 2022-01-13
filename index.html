@@ -16,6 +16,23 @@
     <style>
       * {
         font-family: sans-serif;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      body > * {
+        margin: 5px;
+        justify-content: space-between;
       }
       #content {
         display: none;
@@ -70,8 +87,82 @@
         color: #007bff;
         word-wrap: break-word;
       }
+      .quote-container {
+        display: none;
+        max-height: 120px;
+        border: 1px solid #007bff;
+        background-color: rgba(0, 123, 255, 0.1);
+        border-radius: 5px;
+        justify-content: center;
+        margin: 10px 10px;
+        padding: 0px 10px;
+      }
+      .quote-container > p {
+        text-align: center;
+        overflow: auto;
+        line-height: 1.5em;
+      }
+      .quote-container * {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+      }
     </style>
+  </head>
+  <body>
+    <noscript>
+      <style>
+        .no-script {
+          color: #aa4241;
+          background-color: rgba(242, 222, 223, 0.5);
+          max-width: 90%;
+          min-width: 270px;
+          padding: 3%;
+          font-size: 4vmax;
+          line-height: 1.5em;
+          text-align: center;
+          border-radius: 10px;
+          position: relative;
+          float: left;
+          top: 40%;
+          left: 50%;
+          transform: translate(-50%, -40%);
+          box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.25);
+          -moz-box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.25);
+          -webkit-box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.25);
+        }
+      </style>
+      <p class="no-script">
+        Javascript is disabled,<br />
+        please enable Javascript.
+      </p>
+      <meta http-equiv="refresh" content="10" />
+    </noscript>
+    <div id="content">
+      <meta http-equiv="refresh" content="1800" />
+      <h2 class="title">Index of /</h2>
+      <table class="table-hoverable rc-table">
+        <thead class="th-bg">
+          <tr>
+            <td class="rc-cell" style="min-width: 60%">REPO</td>
+            <td class="rc-cell" style="min-width: 20%">DESCRIPTION</td>
+          </tr>
+        </thead>
+        <tbody id="files-list"></tbody>
+      </table>
+    </div>
+    <div class="quote-container">
+      <p>
+        <span id="quote"></span>
+        <span style="white-space: nowrap; font-weight: bold">&ensp;-&nbsp;<span id="author"></span></span>
+      </p>
+    </div>
     <script>
+      var indexpath = "/";
+      if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
+      else indexpath = window.location.hostname;
+      var indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/")) + "/";
+      document.title = indexof;
+      document.getElementsByClassName("title")[0].innerText = indexof;
+
       var docLoad = setInterval(function () {
         if (document.readyState !== "complete") return;
         getData();
@@ -126,6 +217,7 @@
           }
         }
         document.getElementById("content").style.display = "block";
+        getQuote();
       };
 
       var processError = function (err) {
@@ -137,58 +229,33 @@
         tbody.rows[0].cells[0].className = "rc-cell";
         tbody.rows[0].cells[0].colSpan = 2;
         document.getElementById("content").style.display = "block";
+        getQuote();
       };
-    </script>
-  </head>
-  <body>
-    <noscript>
-      <style>
-        .no-script {
-          color: #aa4241;
-          background-color: rgba(242, 222, 223, 0.5);
-          max-width: 90%;
-          min-width: 270px;
-          padding: 3%;
-          font-size: 4vmax;
-          line-height: 1.5em;
-          text-align: center;
-          border-radius: 10px;
-          position: relative;
-          float: left;
-          top: 40%;
-          left: 50%;
-          transform: translate(-50%, -40%);
-          box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.25);
-          -moz-box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.25);
-          -webkit-box-shadow: 2px 6px 20px rgba(0, 0, 0, 0.25);
-        }
-      </style>
-      <p class="no-script">
-        Javascript is disabled,<br />
-        please enable Javascript.
-      </p>
-      <meta http-equiv="refresh" content="10" />
-    </noscript>
-    <div id="content">
-      <meta http-equiv="refresh" content="300" />
-      <h2 class="title">Index of /</h2>
-      <table class="table-hoverable rc-table">
-        <thead class="th-bg">
-          <tr>
-            <td class="rc-cell" style="min-width: 60%">REPO</td>
-            <td class="rc-cell" style="min-width: 20%">DESCRIPTION</td>
-          </tr>
-        </thead>
-        <tbody id="files-list"></tbody>
-      </table>
-    </div>
-    <script>
-      var indexpath = "/";
-      if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
-      else indexpath = window.location.hostname;
-      var indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/")) + "/";
-      document.title = indexof;
-      document.getElementsByClassName("title")[0].innerText = indexof;
+
+      var getQuote = function () {
+        var api = "https://api.quotable.io/random?maxLength=130";
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState !== 4) return;
+          if (xhr.status >= 200 && xhr.status < 300) {
+            var data = JSON.parse(xhr.responseText);
+            processQuoteData(data);
+          } else {
+            console.log("Error while retrieving quote...!");
+          }
+        };
+        xhr.open("GET", api);
+        xhr.onerror = function (err) {
+          console.log(err);
+        };
+        xhr.send();
+      };
+
+      var processQuoteData = function (data) {
+        document.getElementById("quote").innerText = data.content;
+        document.getElementById("author").innerText = data.author;
+        document.getElementsByClassName("quote-container")[0].style.display = "flex";
+      };
     </script>
   </body>
 </html>
