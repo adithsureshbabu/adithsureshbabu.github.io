@@ -5,14 +5,25 @@
     <link rel="icon" href="/favicon-32x32.png" />
     <link rel="stylesheet" href="../styles/loading.css" />
     <script>
-      Object.prototype.fadeOut = function () {
+      Object.prototype.fadeOut = function (speed, removeElement) {
+        var ms;
+        ms = speed === "slow" ? 60 : 20;
         if (!(typeof this === "object") || !this.style) return "Invalid Element";
         var fadeTarget = this;
         var fadeEffect = setInterval(function () {
+          if (!fadeTarget.style.display || fadeTarget.style.display === "none") fadeTarget.style.display = "block";
+          if (!fadeTarget.style.visibility || fadeTarget.style.visibility === "hidden")
+            fadeTarget.style.visibility = "visible";
           if (!fadeTarget.style.opacity) fadeTarget.style.opacity = 1;
-          if (fadeTarget.style.opacity > 0) fadeTarget.style.opacity -= 0.1;
-          else clearInterval(fadeEffect);
-        }, 60);
+          if (parseFloat(fadeTarget.style.opacity) > 0)
+            fadeTarget.style.opacity = parseFloat(fadeTarget.style.opacity) - 0.1;
+          else {
+            fadeTarget.style.visibility = "hidden";
+            fadeTarget.style.display = "none";
+            clearInterval(fadeEffect);
+            if (removeElement && fadeTarget.parentElement) fadeTarget.parentElement.removeChild(fadeTarget);
+          }
+        }, ms);
       };
     </script>
   </head>

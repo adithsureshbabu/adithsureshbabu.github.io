@@ -15,8 +15,13 @@
 				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 				<style type="text/css">
-					body {
+					* {
 						font-family:"Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana,sans-serif;
+						-webkit-box-sizing: border-box;
+						-moz-box-sizing: border-box;
+						box-sizing: border-box;
+					}
+					body {
 						font-size:18px;
 					}
 					table {
