@@ -12,7 +12,7 @@
       var args = arguments;
       var alertInterval = setInterval(function () {
         if (!window.alertVisible) {
-          cAlert(args[0], args[1], args[2]);
+          calert(args[0], args[1], args[2]);
           clearInterval(alertInterval);
         }
       }, 50);
@@ -80,7 +80,7 @@ Object.prototype.fadeIn = function (speed, removeElement) {
   }
 };
 
-function cAlert(message, title, theme) {
+function calert(message, title, theme) {
   try {
     window.alertVisible = true;
     var divAlert = document.querySelectorAll(".c-alert")[0];

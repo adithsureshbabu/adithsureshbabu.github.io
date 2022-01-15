@@ -11,67 +11,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="shortcut icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-    <style>
-      * {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-          "Helvetica Neue", sans-serif;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-      }
-      #content {
-        display: none;
-      }
-      a {
-        text-decoration: none;
-      }
-      a:active,
-      a:hover {
-        color: crimson;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-      thead {
-        font-weight: bold;
-      }
-      table,
-      th,
-      tr,
-      td {
-        margin: 0 auto;
-        border: 2px solid #ddd;
-        padding: 2px;
-      }
-      table {
-        width: 90%;
-      }
-      .table-hoverable tbody tr:hover {
-        background-color: #f2f2f2;
-      }
-      .rc-table {
-        border-collapse: separate;
-        border-spacing: 0px;
-        border: 2px solid #ddd;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        padding: 4px;
-      }
-      .rc-cell {
-        border-collapse: separate;
-        border: 2px solid #ddd;
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        padding: 4px;
-      }
-      .th-bg {
-        background-color: #007bff;
-        color: white;
-      }
-      h2.title {
-        color: #007bff;
-      }
-    </style>
+    <link rel="preload" href="/fonts/Nunito-Regular-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/Nunito-Regular-latin-ext.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/fonts/font.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/scripts/script.js"></script>
     <script>
       var docLoad = setInterval(function () {
         if (document.readyState !== "complete") return;
@@ -105,20 +49,7 @@
           processError();
         } else {
           for (i = data.length - 1; i >= 0; i--) {
-            var fsize, ftype, suffix;
-            if (data[i].size > 1024) {
-              fsize = data[i].size / 1024;
-              suffix = "KB";
-            } else if (data[i].size > 1048576) {
-              fsize = data[i].size / 1024;
-              suffix = "MB";
-            } else if (data[i].size > 1073741824) {
-              fsize = data[i].size / 1024;
-              suffix = "GB";
-            } else {
-              fsize = data[i].size;
-              suffix = "B";
-            }
+            var ftype;
             if (data[i].name != "index.html" && data[i].name != "index.htm") {
               var td = tbody.insertRow(0);
               var a = document.createElement("a");
@@ -134,7 +65,7 @@
               td.insertCell(1).innerText = data[i].type;
               tbody.rows[0].cells[1].className = "rc-cell";
 
-              td.insertCell(2).innerText = fsize.toFixed(2) + suffix;
+              td.insertCell(2).innerText = bytesToSize(data[i].size);
               tbody.rows[0].cells[2].className = "rc-cell";
             }
           }
@@ -184,9 +115,9 @@
       <table class="table-hoverable rc-table">
         <thead class="th-bg">
           <tr>
-            <td class="rc-cell" style="min-width: 60%">FILES</td>
-            <td class="rc-cell" style="min-width: 20%">TYPE</td>
-            <td class="rc-cell" style="min-width: 20%">SIZE</td>
+            <td class="rc-cell">FILES</td>
+            <td class="rc-cell">TYPE</td>
+            <td class="rc-cell">SIZE</td>
           </tr>
         </thead>
         <tbody id="files-list"></tbody>
