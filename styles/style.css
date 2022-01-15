@@ -93,7 +93,7 @@ h2.title {
 }
 .quote-container {
   display: none;
-  max-height: 120px;
+  max-height: 150px;
   border: 1px solid #007bff;
   background-color: rgba(0, 123, 255, 0.1);
   border-radius: 5px;
