@@ -107,6 +107,12 @@ h2.title {
   line-height: 1.5em;
 }
 @media screen and (max-width: 768px) {
+  .rc-table.noftfs tbody tr td:nth-child(1) {
+    width: 35%;
+  }
+  .rc-table.noftfs tbody tr td:nth-child(2) {
+    width: 65%;
+  }
   .rc-table:not(.noftfs) tbody tr td:nth-child(1) {
     width: 50%;
   }
@@ -116,6 +122,12 @@ h2.title {
   }
 }
 @media screen and (max-width: 375px) {
+  .rc-table.noftfs tbody tr td:nth-child(1) {
+    width: 40%;
+  }
+  .rc-table.noftfs tbody tr td:nth-child(2) {
+    width: 60%;
+  }
   .rc-table:not(.noftfs) tbody tr td:nth-child(1) {
     width: 40%;
   }
