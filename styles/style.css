@@ -71,11 +71,11 @@ table {
   color: white;
 }
 .rc-table.noftfs tbody tr td:nth-child(1) {
-  width: 35%;
+  width: 30%;
   word-break: break-word;
 }
 .rc-table.noftfs tbody tr td:nth-child(2) {
-  width: 65%;
+  width: 70%;
   word-break: break-word;
 }
 .rc-table:not(.noftfs) tbody tr td:nth-child(1) {
