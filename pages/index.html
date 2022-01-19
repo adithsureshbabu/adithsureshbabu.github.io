@@ -16,120 +16,48 @@
     <link rel="stylesheet" href="/fonts/font.css" />
     <link rel="stylesheet" href="/styles/style.css" />
     <script src="/scripts/script.js"></script>
+    <script src="/scripts/tablesort.min.js"></script>
     <script>
       var docLoad = setInterval(function () {
         if (document.readyState !== "complete") return;
-        getData();
+        new Tablesort(document.querySelector("#index_data"));
+        getData("pages");
         clearInterval(docLoad);
       }, 100);
-
-      function getData() {
-        var api = "https://api.github.com/repositories/147058348/contents/pages";
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState !== 4) return;
-          if (xhr.status >= 200 && xhr.status < 300) {
-            var data = JSON.parse(xhr.responseText);
-            processData(data);
-          } else {
-            processError();
-          }
-        };
-        xhr.open("GET", api);
-        xhr.onerror = function (err) {
-          processError(err);
-        };
-        xhr.send();
-      }
-
-      var processData = function (data) {
-        var tbody = document.querySelector("#files-list");
-        document.querySelector("#files-list").innerHTML = "";
-        if (!data.length || data.length < 1) {
-          processError();
-        } else {
-          for (i = data.length - 1; i >= 0; i--) {
-            var ftype;
-            if (data[i].name != "index.html" && data[i].name != "index.htm") {
-              var td = tbody.insertRow(0);
-              var a = document.createElement("a");
-              a.target = "_blank";
-              a.innerText = data[i].name;
-              if (data[i].type == "dir") {
-                a.href = "./" + data[i].name + "/";
-              } else {
-                a.href = "./" + data[i].name;
-              }
-              td.insertCell(0).appendChild(a);
-              tbody.rows[0].cells[0].className = "rc-cell";
-              td.insertCell(1).innerText = data[i].type;
-              tbody.rows[0].cells[1].className = "rc-cell";
-
-              td.insertCell(2).innerText = bytesToSize(data[i].size);
-              tbody.rows[0].cells[2].className = "rc-cell";
-            }
-          }
-        }
-        document.querySelector("#content").style.display = "block";
-      };
-
-      var processError = function (err) {
-        var tbody = document.querySelector("#files-list");
-        document.querySelector("#files-list").innerHTML = "";
-        var td = tbody.insertRow(0);
-        td.insertCell(0).innerText = "No Data";
-        td.style.textAlign = "center";
-        tbody.rows[0].cells[0].className = "rc-cell";
-        tbody.rows[0].cells[0].colSpan = 3;
-        document.querySelector("#content").style.display = "block";
-      };
     </script>
   </head>
   <body>
     <noscript>
-      <style>
-        .no-script {
-          color: #aa4241;
-          background-color: #f2dedf;
-          padding: 1%;
-          font-size: 4vmax;
-          text-align: center;
-          border: 1px solid #e096a2;
-          border-radius: 10px;
-          position: relative;
-          float: left;
-          top: 40%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
-          -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
-          -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-      </style>
       <p class="no-script">JavaScript is disabled, please enable JavaScript.</p>
       <meta http-equiv="refresh" content="10" />
     </noscript>
     <div id="content">
       <meta http-equiv="refresh" content="1800" />
-      <h2 class="title">Index of /pages</h2>
-      <table class="table-hoverable rc-table">
+      <h1 class="title">Index of /pages</h1>
+      <table id="index_data" class="table-hoverable rc-table">
         <thead class="th-bg">
           <tr>
-            <td class="rc-cell">FILES</td>
-            <td class="rc-cell">TYPE</td>
-            <td class="rc-cell">SIZE</td>
+            <th class="rc-cell colname" role="columnheader">
+              <a href="#" onclick="return false">Name</a>
+            </th>
+            <th class="rc-cell colname" data-sort-method="number" role="columnheader">
+              <a href="#" onclick="return false">Last Mod.</a>
+            </th>
+            <th class="rc-cell colname" data-sort-method="number" role="columnheader">
+              <a href="#" onclick="return false">Size</a>
+            </th>
           </tr>
         </thead>
-        <tbody id="files-list"></tbody>
+        <tbody id="files-list">
+          <tr data-sort-method="none">
+            <td class="rc-cell">
+              <a href="../"><img class="icon" src="/images/icons/icon-corner-left-up.svg" alt="Up" />Parent Directory</a>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
       </table>
     </div>
-    <script>
-      var indexpath = "/";
-      if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
-      else indexpath = window.location.hostname;
-      var indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/"));
-      document.title = indexof;
-      document.querySelector(".title").innerText = indexof;
-    </script>
   </body>
 </html>

@@ -17,6 +17,7 @@
     <link rel="preload" href="/fonts/Nunito-Regular-latin-ext.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
     <link rel="stylesheet" href="/fonts/font.css" />
     <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/scripts/tablesort.min.js"></script>
   </head>
   <body>
     <noscript>
@@ -49,41 +50,103 @@
     </noscript>
     <div id="content">
       <meta http-equiv="refresh" content="1800" />
-      <h2 class="title">Index of /</h2>
-      <table class="table-hoverable rc-table noftfs">
+      <h1 class="title">Index of /</h1>
+      <table id="index_data" class="table-hoverable rc-table noftfs">
         <thead class="th-bg">
           <tr>
-            <td class="rc-cell">REPOSITORY</td>
-            <td class="rc-cell">DESCRIPTION</td>
+            <th class="rc-cell colname" role="columnheader">
+              <a href="#" onclick="return false">Repository</a>
+            </th>
+            <th class="rc-cell colname" data-sort-method="number" role="columnheader">
+              <a href="#" onclick="return false">Description</a>
+            </th>
+            <th class="rc-cell colname" data-sort-method="number" role="columnheader">
+              <a href="#" onclick="return false">Last Mod.</a>
+            </th>
           </tr>
         </thead>
         <tbody id="files-list"></tbody>
       </table>
-    </div>
-    <div class="quote-container">
-      <p>
-        <span id="quote"></span>
-        <span style="white-space: nowrap; font-weight: bold">&ensp;-&nbsp;<span id="author"></span></span>
-      </p>
+      <div class="quote-container">
+        <p>
+          <span id="quote"></span>
+          <span style="white-space: nowrap; font-weight: bold">&ensp;-&nbsp;<span id="author"></span></span>
+        </p>
+      </div>
     </div>
     <script>
-      var indexpath = "/";
-      if (window.location.pathname) indexpath = window.location.hostname + window.location.pathname;
-      else indexpath = window.location.hostname;
-      var indexof = "Index of " + indexpath.substring(0, indexpath.lastIndexOf("/")) + "/";
-      document.title = indexof;
-      document.getElementsByClassName("title")[0].innerText = indexof;
-
       var docLoad = setInterval(function () {
         if (document.readyState !== "complete") return;
+        new Tablesort(document.querySelector("#index_data"));
+        var indexpath = "/";
+        if (window.location.pathname) indexpath = window.location.pathname.substring(1);
+        // else indexpath = window.location.hostname;
+        var indexof = "Index of /" + indexpath.substring(0, indexpath.lastIndexOf("/"));
+        document.title = indexof;
+        document.querySelector(".title").innerText = indexof;
         getData();
         clearInterval(docLoad);
       }, 100);
 
+      Number.prototype.padLeft = function (base, chr) {
+        var len = String(base || 10).length - String(this).length + 1;
+        return len > 0 ? new Array(len).join(chr || "0") + this : this;
+      };
+
+      var getLastModifiedDate = (...args) => {
+        var result = {};
+        var user = "adithsuresh";
+        if (window.location.hostname.split(".")[1] === "github") user = window.location.hostname.split(".")[0];
+        var lm_api = "https://api.github.com/repos/" + user + "/" + args[0] + "/branches/master";
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState !== 4) return;
+          if (xhr.status >= 200 && xhr.status < 300) {
+            var data = JSON.parse(xhr.responseText);
+            var utcdate = data.commit.commit.committer.date;
+            var ld = new Date(utcdate),
+              formattedDate =
+                [ld.getFullYear(), (ld.getMonth() + 1).padLeft(), ld.getDate().padLeft()].join("-") +
+                " " +
+                [ld.getHours().padLeft(), ld.getMinutes().padLeft()].join(":");
+            result.time = new Date(utcdate).getTime();
+            result.date = formattedDate;
+            args[1].datetime = result;
+            getLastModifiedDateCallback(args[1]);
+          } else {
+            console.log("ERROR WHILE FETCHING DATA");
+          }
+        };
+        xhr.open("GET", lm_api);
+        xhr.onerror = function (err) {
+          console.log(err);
+        };
+        xhr.send();
+      };
+
+      function getLastModifiedDateCallback({ tbody, data, i, datetime }) {
+        var tr = tbody.insertRow(0);
+        var a = document.createElement("a");
+        a.href = data[i].homepage;
+        a.target = "_blank";
+        a.innerText = data[i].name;
+        var td1 = tr.insertCell(0);
+        td1.appendChild(a);
+        td1.className = "rc-cell";
+        if (!data[i].description) data[i].description = "-";
+        var td2 = tr.insertCell(1);
+        td2.innerText = data[i].description;
+        td2.className = "rc-cell";
+        var td3 = tr.insertCell(2);
+        td3.innerText = datetime.date;
+        td3.setAttribute("data-sort", datetime.time);
+        td3.className = "rc-cell";
+      }
+
       var getData = function () {
-        var repo = "adithsuresh";
-        if (window.location.hostname.split(".")[1] === "github") repo = window.location.hostname.split(".")[0];
-        var api = "https://api.github.com/users/" + repo + "/repos";
+        var user = "adithsuresh";
+        if (window.location.hostname.split(".")[1] === "github") user = window.location.hostname.split(".")[0];
+        var api = "https://api.github.com/users/" + user + "/repos";
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
           if (xhr.readyState !== 4) return;
@@ -103,27 +166,17 @@
 
       var processData = function (data) {
         var tbody = document.getElementById("files-list");
-        document.getElementById("files-list").innerHTML = "";
+        tbody.innerHTML = "";
         if (!data.length || data.length < 1) {
           processError();
         } else {
-          for (i = data.length - 1; i >= 0; i--) {
+          for (var i = data.length - 1; i >= 0; i--) {
             if (data[i].homepage) {
               if (data[i].name === window.location.host) {
                 continue;
               }
-              var td = tbody.insertRow(0);
-              var a = document.createElement("a");
-              a.href = data[i].homepage;
-              a.target = "_blank";
-              a.innerText = data[i].name;
-              td.insertCell(0).appendChild(a);
-              tbody.rows[0].cells[0].className = "rc-cell";
-              if (!data[i].description) {
-                data[i].description = "-";
-              }
-              td.insertCell(1).innerText = data[i].description;
-              tbody.rows[0].cells[1].className = "rc-cell";
+              var lmd_reponame = encodeURIComponent(data[i].name);
+              getLastModifiedDate(lmd_reponame, { tbody, data, i });
             }
           }
         }
@@ -133,12 +186,12 @@
 
       var processError = function (err) {
         var tbody = document.getElementById("files-list");
-        document.getElementById("files-list").innerHTML = "";
+        tbody.innerHTML = "";
         var td = tbody.insertRow(0);
         td.insertCell(0).innerText = "No Data";
         td.style.textAlign = "center";
         tbody.rows[0].cells[0].className = "rc-cell";
-        tbody.rows[0].cells[0].colSpan = 2;
+        tbody.rows[0].cells[0].colSpan = 3;
         document.getElementById("content").style.display = "block";
         getQuote();
       };
