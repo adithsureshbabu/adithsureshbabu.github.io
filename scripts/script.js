@@ -55,13 +55,13 @@ var getLastModifiedDate = (...args) => {
 };
 
 function getLastModifiedDateCallback({ tbody, data, i, datetime }) {
-  var tr = tbody.insertRow(-1);
+  var tr = tbody.insertRow(data[i].type === "dir" ? 1 : -1);
   var a = document.createElement("a");
   var img = document.createElement("img");
   img.classList.add("icon");
-  img.src = "/images/icons/" + getIcon(data[i].name);
-  img.alt = "file";
-  a.target = "_blank";
+  img.src = "/images/icons/" + getIcon(data[i].name, data[i].type);
+  img.alt = data[i].type === "dir" ? "dir" : "file";
+  a.target = data[i].type === "dir" ? "_self" : "_blank";
   if (data[i].type == "dir") {
     a.href = "./" + data[i].name + "/";
   } else {
@@ -78,7 +78,7 @@ function getLastModifiedDateCallback({ tbody, data, i, datetime }) {
   td2.setAttribute("data-sort", datetime.time);
   td2.className = "rc-cell";
   var td3 = tr.insertCell(2);
-  td3.innerText = bytesToSize(data[i].size);
+  td3.innerText = data[i].type === "dir" ? "-" : bytesToSize(data[i].size);
   td3.setAttribute("data-sort", data[i].size);
   td3.className = "rc-cell";
 }
@@ -112,7 +112,7 @@ var processData = function (data) {
     for (i = 0; i < data.length; i++) {
       var ftype;
       if (data[i].name != "index.html" && data[i].name != "index.htm") {
-        var lmd_path = encodeURIComponent(data[i].download_url.split("master/")[1]);
+        var lmd_path = encodeURIComponent(data[i].html_url.split("master/")[1]);
         getLastModifiedDate(lmd_path, { tbody, data, i });
       }
     }
