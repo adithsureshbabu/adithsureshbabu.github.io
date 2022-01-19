@@ -27,6 +27,12 @@ body > * {
 }
 #content {
   display: none;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#table_main {
+  flex: 1;
 }
 a {
   text-decoration: none;

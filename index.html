@@ -8,6 +8,7 @@
     <title>Index of /</title>
     <meta name="google-site-verification" content="C6tra7qp9MtfyUZAX885levrTavCbgsoTpVa4Hve7Nc" />
     <meta name="robots" content="index, follow" />
+    <meta http-equiv="refresh" content="1800" />
     <link rel="canonical" href="index.html" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -49,24 +50,27 @@
       <meta http-equiv="refresh" content="10" />
     </noscript>
     <div id="content">
-      <meta http-equiv="refresh" content="1800" />
-      <h1 class="title">Index of /</h1>
-      <table id="index_data" class="table-hoverable rc-table noftfs">
-        <thead class="th-bg">
-          <tr>
-            <th class="rc-cell colname" role="columnheader">
-              <a href="#" onclick="return false">Repository</a>
-            </th>
-            <th class="rc-cell colname" data-sort-method="number" role="columnheader">
-              <a href="#" onclick="return false">Description</a>
-            </th>
-            <th class="rc-cell colname" data-sort-method="number" role="columnheader">
-              <a href="#" onclick="return false">Last Mod.</a>
-            </th>
-          </tr>
-        </thead>
-        <tbody id="files-list"></tbody>
-      </table>
+      <div>
+        <h1 class="title">Index of /</h1>
+      </div>
+      <div id="table_main">
+        <table id="index_data" class="table-hoverable rc-table noftfs">
+          <thead class="th-bg">
+            <tr>
+              <th class="rc-cell colname" role="columnheader">
+                <a href="#" onclick="return false">Repository</a>
+              </th>
+              <th class="rc-cell colname" data-sort-method="number" role="columnheader">
+                <a href="#" onclick="return false">Description</a>
+              </th>
+              <th class="rc-cell colname" data-sort-method="number" role="columnheader">
+                <a href="#" onclick="return false">Last Mod.</a>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="files-list"></tbody>
+        </table>
+      </div>
       <div class="quote-container">
         <p>
           <span id="quote"></span>
@@ -180,7 +184,7 @@
             }
           }
         }
-        document.getElementById("content").style.display = "block";
+        document.getElementById("content").style.display = "flex";
         getQuote();
       };
 
@@ -192,7 +196,7 @@
         td.style.textAlign = "center";
         tbody.rows[0].cells[0].className = "rc-cell";
         tbody.rows[0].cells[0].colSpan = 3;
-        document.getElementById("content").style.display = "block";
+        document.getElementById("content").style.display = "flex";
         getQuote();
       };
 
