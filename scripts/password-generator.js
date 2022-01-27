@@ -2,7 +2,20 @@ var characters = {
   upperLetters: "QWERTYUIOPASDFGHJKLZXCVBNM",
   lowerLetters: "qwertyuiopasdfghjklzxcvbnm",
   numbers: "0123456789",
-  symbols: "~!@#$%^&*_+-.?",
+  symbols: "~!@#$%^&*_+.?",
+};
+
+String.prototype.shuffle = function () {
+  if (!this) return this;
+  var a = this.split(""),
+    n = a.length;
+  for (var i = n - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+  }
+  return a.join("");
 };
 
 function debounce(func, wait, immediate) {
@@ -91,7 +104,7 @@ function generateCharacter(options) {
 var domLoaded = setInterval(function () {
   if (document.readyState !== "complete") return;
   clearInterval(domLoaded);
-  txtOutPasswordEl.value = generatePassword();
+  txtOutPasswordEl.value = generatePassword().shuffle();
 }, 50);
 
 var btnCopyEl = document.querySelector("#btnCopy");
