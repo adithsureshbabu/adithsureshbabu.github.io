@@ -1,6 +1,6 @@
 (function () {
   var loaderStylesheet =
-    ".c-alert-mask{z-index:99999999;position:fixed;display:none;width:100vw;height:100vh;box-sizing:border-box;padding:0;margin:0;background:rgba(0,0,0,.2);top:50%;left:50%;transform:translate(-50%,-50%);transition:all .2s cubic-bezier(.1,.7,.4,1) 0s}.c-alert-mask,.c-alert-mask *{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}.c-alert,.c-alert *{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif}.c-alert :focus{outline:0}.c-alert{z-index:999999999;display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);min-width:260px;max-width:90%;max-height:90%;text-align:center;font-size:14px;line-height:1.4;border-radius:6px;overflow:auto;background-color:#ffffff;box-shadow:0 2px 12px rgba(0,0,0,.07);-webkit-box-shadow:0 2px 12px rgba(0,0,0,.07);transition:all .2s cubic-bezier(.1,.7,.4,1) 0s}.c-alert .c-alert-content{padding:15px;min-height:30px}.c-alert .c-alert-title{font-weight:500;font-size:17px}.c-alert .c-alert-msg{margin-top:5px;font-size:14px}.c-alert .c-alert-btn{height:44px;line-height:44px;font-size:16px;color:#007aff;border-radius:0 0 6px 6px;overflow:hidden;cursor:pointer;border-top:1px solid #ddd}.c-alert .c-alert-btn:active{background:#eeeeee}";
+    "[class*=' c-alert'],[class*=' c-alert'] *,[class^=c-alert],[class^=c-alert] *{scrollbar-width:thin;scrollbar-color:#a8a8a8 transparent}[class*=' c-alert'] ::-webkit-scrollbar,[class*=' c-alert']::-webkit-scrollbar,[class^=c-alert] ::-webkit-scrollbar,[class^=c-alert]::-webkit-scrollbar{width:9px;height:9px;border-radius:12px}[class*=' c-alert'] ::-webkit-scrollbar-track,[class*=' c-alert']::-webkit-scrollbar-track,[class^=c-alert] ::-webkit-scrollbar-track,[class^=c-alert]::-webkit-scrollbar-track{background:0 0}[class*=' c-alert'] ::-webkit-scrollbar-thumb,[class*=' c-alert']::-webkit-scrollbar-thumb,[class^=c-alert] ::-webkit-scrollbar-thumb,[class^=c-alert]::-webkit-scrollbar-thumb{background-color:#a8a8a8;border-radius:8px;border:1px solid #d9d9d9}[class*=' c-alert'] ::-webkit-scrollbar-corner,[class*=' c-alert']::-webkit-scrollbar-corner,[class^=c-alert] ::-webkit-scrollbar-corner,[class^=c-alert]::-webkit-scrollbar-corner{background:0 0}[class*=' c-alert'] ::-webkit-scrollbar-thumb:hover,[class*=' c-alert']::-webkit-scrollbar-thumb:hover,[class^=c-alert] ::-webkit-scrollbar-thumb:hover,[class^=c-alert]::-webkit-scrollbar-thumb:hover{background-color:#787878}[class*=' c-alert'] ::-webkit-scrollbar-thumb:active,[class*=' c-alert']::-webkit-scrollbar-thumb:active,[class^=c-alert] ::-webkit-scrollbar-thumb:active,[class^=c-alert]::-webkit-scrollbar-thumb:active{background-color:#5a5a5a}.c-alert-mask{z-index:99999999;position:fixed;display:none;width:100vw;height:100vh;box-sizing:border-box;padding:0;margin:0;background:rgba(0,0,0,.2);top:50%;left:50%;transform:translate(-50%,-50%);transition:all .2s cubic-bezier(.1,.7,.4,1) 0s}.c-alert-mask,.c-alert-mask *{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.c-alert,.c-alert *{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif}.c-alert :focus{outline:0}.c-alert{z-index:999999999;display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);min-width:260px;max-width:90%;max-height:90%;text-align:center;font-size:14px;line-height:1.4;border-radius:6px;overflow:auto;background-color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.07);-webkit-box-shadow:0 2px 12px rgba(0,0,0,.07);transition:all .2s cubic-bezier(.1,.7,.4,1) 0s}.c-alert .c-alert-content{padding:15px;min-height:30px}.c-alert .c-alert-title{font-weight:500;font-size:17px}.c-alert .c-alert-msg{margin-top:5px;font-size:14px}.c-alert .c-alert-btn{height:44px;line-height:44px;font-size:16px;color:#007aff;border-radius:0 0 6px 6px;overflow:hidden;cursor:pointer;border-top:1px solid #ddd}.c-alert .c-alert-btn:active{background:#eee}";
   var loaderStyle = document.createElement("style");
   loaderStyle.innerText = loaderStylesheet.trim().replace(/\r?\n|\r|\s\s+/g, "");
   document.head.appendChild(loaderStyle);
@@ -40,11 +40,9 @@ Object.prototype.fadeOut = function (speed, removeElement) {
     var fadeTarget = this;
     var fadeEffect = setInterval(function () {
       if (!fadeTarget.style.display || fadeTarget.style.display === "none") fadeTarget.style.display = "block";
-      if (!fadeTarget.style.visibility || fadeTarget.style.visibility === "hidden")
-        fadeTarget.style.visibility = "visible";
+      if (!fadeTarget.style.visibility || fadeTarget.style.visibility === "hidden") fadeTarget.style.visibility = "visible";
       if (!fadeTarget.style.opacity) fadeTarget.style.opacity = 1;
-      if (parseFloat(fadeTarget.style.opacity) > 0)
-        fadeTarget.style.opacity = parseFloat(fadeTarget.style.opacity) - 0.1;
+      if (parseFloat(fadeTarget.style.opacity) > 0) fadeTarget.style.opacity = parseFloat(fadeTarget.style.opacity) - 0.1;
       else {
         fadeTarget.style.visibility = "hidden";
         fadeTarget.style.display = "none";
@@ -65,11 +63,9 @@ Object.prototype.fadeIn = function (speed, removeElement) {
     var fadeTarget = this;
     var fadeEffect = setInterval(function () {
       if (!fadeTarget.style.display || fadeTarget.style.display === "none") fadeTarget.style.display = "block";
-      if (!fadeTarget.style.visibility || fadeTarget.style.visibility === "hidden")
-        fadeTarget.style.visibility = "visible";
+      if (!fadeTarget.style.visibility || fadeTarget.style.visibility === "hidden") fadeTarget.style.visibility = "visible";
       if (!fadeTarget.style.opacity) fadeTarget.style.opacity = 0;
-      if (parseFloat(fadeTarget.style.opacity) < 1)
-        fadeTarget.style.opacity = parseFloat(fadeTarget.style.opacity) + 0.1;
+      if (parseFloat(fadeTarget.style.opacity) < 1) fadeTarget.style.opacity = parseFloat(fadeTarget.style.opacity) + 0.1;
       else {
         clearInterval(fadeEffect);
         if (removeElement && fadeTarget.parentElement) fadeTarget.parentElement.removeChild(fadeTarget);
@@ -89,8 +85,7 @@ function calert(message, title, theme) {
     if (divAlertMask) divAlertMask.parentElement.removeChild(divAlertMask);
     if (message !== undefined) message = typeof message === "object" ? JSON.stringify(message) : String(message);
     if (!message) message = "";
-    if (title !== undefined && title !== null && title !== false)
-      title = typeof title === "object" ? JSON.stringify(title) : String(title);
+    if (title !== undefined && title !== null && title !== false) title = typeof title === "object" ? JSON.stringify(title) : String(title);
     if (title === "" || title === false || title === null) title = "";
     if (title !== "" && !title) title = window.location.host ? window.location.host + " says" : "This page says";
     var divClasses = ["c-alert", "c-alert-content", "c-alert-title", "c-alert-msg", "c-alert-btn", "c-alert-mask"];
