@@ -2,7 +2,7 @@ var characters = {
   upperLetters: "QWERTYUIOPASDFGHJKLZXCVBNM",
   lowerLetters: "qwertyuiopasdfghjklzxcvbnm",
   numbers: "0123456789",
-  symbols: "~!@#$%^&*()_+={}[]<>,.-|:;?",
+  symbols: "~!@#$%^&*_+-.?",
 };
 
 function debounce(func, wait, immediate) {
