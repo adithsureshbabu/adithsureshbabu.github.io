@@ -53,10 +53,15 @@ function generatePassword(length, options) {
   var password = "";
   if (length > 0 && options.lowerletter) {
     password += getLowercase();
-  } else if (length > 0 && options.upperletter) {
+  }
+  if (length > 1 && options.upperletter) {
     password += getUppercase();
-  } else if (length > 0 && options.number) {
+  }
+  if (length > 2 && options.number) {
     password += getNumber();
+  }
+  if (length > 3 && options.symbol) {
+    password += getSymbol();
   }
   for (var i = password.length; i < length; i++) {
     var rdmCharacter = generateCharacter(options);
