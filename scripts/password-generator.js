@@ -136,7 +136,7 @@ btnGeneratePwdEl.addEventListener(
       lowerletter: chkLowercaseEl.checked,
       number: chkNumbersEl.checked,
       symbol: chkSymbolsEl.checked,
-    });
+    }).shuffle();
   })
 );
 
