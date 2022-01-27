@@ -20,6 +20,30 @@
 						-webkit-box-sizing: border-box;
 						-moz-box-sizing: border-box;
 						box-sizing: border-box;
+						scrollbar-width: thin;
+						scrollbar-color: #a8a8a8 transparent;
+					}
+					*::-webkit-scrollbar {
+						width: 9px;
+						height: 9px;
+						border-radius: 12px;
+					}
+					*::-webkit-scrollbar-track {
+						background: transparent;
+					}
+					*::-webkit-scrollbar-thumb {
+						background-color: #a8a8a8;
+						border-radius: 8px;
+						border: 1px solid #d9d9d9;
+					}
+					*::-webkit-scrollbar-corner {
+						background: transparent;
+					}
+					*::-webkit-scrollbar-thumb:hover {
+						background-color: #787878;
+					}
+					*::-webkit-scrollbar-thumb:active {
+						background-color: #5a5a5a;
 					}
 					body {
 						font-size:18px;
