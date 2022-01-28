@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Circle Pulse Preloader</title>
+    <meta name="robots" content="index, follow" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="shortcut icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <style>
+      .cp-preloader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        text-align: center;
+        z-index: 99999999;
+        opacity: 1;
+        transition: all 0.5s ease-out;
+      }
+      .cp-preloader > * {
+        min-width: 0;
+      }
+      .cp-preloader > .preloader-wrap {
+        width: 100%;
+        max-width: 9.375rem;
+      }
+      .cp-preloader > .preloader-wrap > .load-progress-wrap {
+        background: #ffffff;
+        height: 0.125rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        width: 100%;
+      }
+      .cp-preloader > .preloader-wrap > .load-progress-wrap > span {
+        background: rgb(48, 76, 253);
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0;
+        transition: all 0.25s ease;
+      }
+      .cp-preloader > .preloader-wrap > .circle-pulse > * {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        box-sizing: border-box;
+        transform: scale(0);
+        animation: pulse 1.6s linear infinite;
+      }
+      .cp-preloader > .preloader-wrap > .circle-pulse > *:nth-child(1) {
+        width: 6rem;
+        height: 6rem;
+        margin-top: -3rem;
+        margin-left: -3rem;
+        background-color: rgb(48, 76, 253);
+      }
+      .cp-preloader > .preloader-wrap > .circle-pulse > *:nth-child(2) {
+        width: 4.8rem;
+        height: 4.8rem;
+        margin-top: -2.4rem;
+        margin-left: -2.4rem;
+        background-color: rgba(48, 76, 253, 0.7);
+        animation-delay: -0.8s;
+      }
+      /*! dark-theme */
+      .cp-preloader.cp-preloader-dark-theme {
+        background-color: #272333;
+      }
+      .cp-preloader.cp-preloader-dark-theme > .preloader-wrap > .load-progress-wrap > span {
+        background: rgb(13, 134, 255);
+      }
+      .cp-preloader.cp-preloader-dark-theme > .preloader-wrap > .circle-pulse > *:nth-child(1) {
+        background-color: rgb(13, 134, 255);
+      }
+      .cp-preloader.cp-preloader-dark-theme > .preloader-wrap > .circle-pulse > *:nth-child(2) {
+        background-color: rgba(13, 134, 255, 0.7);
+      }
+      @keyframes pulse {
+        0% {
+          transform: scale(0, 0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1, 1);
+          opacity: 0;
+        }
+      }
+    </style>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        min-width: 100%;
+        background-color: #eee;
+      }
+      .image-gallery {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem;
+      }
+      .image-gallery > img {
+        margin: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      var cpPreloader = (function () {
+        var cpp = {};
+        cpp.start = function (theme, progress_bar_increment) {
+          var circle_pulse_el = document.createElement("div");
+          circle_pulse_el.classList.add("circle-pulse");
+          circle_pulse_el.appendChild(document.createElement("div"));
+          circle_pulse_el.appendChild(document.createElement("div"));
+          var load_progress_wrap_el = document.createElement("div");
+          load_progress_wrap_el.classList.add("load-progress-wrap");
+          load_progress_wrap_el.appendChild(document.createElement("span"));
+          var preloader_wrap_el = document.createElement("div");
+          preloader_wrap_el.classList.add("preloader-wrap");
+          preloader_wrap_el.appendChild(circle_pulse_el);
+          preloader_wrap_el.appendChild(load_progress_wrap_el);
+          var cp_preloader_el = document.createElement("div");
+          cp_preloader_el.classList.add("cp-preloader");
+          if (theme === "dark") cp_preloader_el.classList.add("cp-preloader-dark-theme");
+          cp_preloader_el.appendChild(preloader_wrap_el);
+          document.body.appendChild(cp_preloader_el);
+          var load_progress_el = load_progress_wrap_el.querySelector("span");
+          var progress = 0;
+          var progress_interval = setInterval(function () {
+            if (document.readyState !== "complete") {
+              progress += progress_bar_increment || 1.5;
+              if (progress < 100) load_progress_el.style.width = progress + "%";
+              else {
+                progress = 100;
+                load_progress_el.style.width = progress + "%";
+              }
+            }
+            if (document.readyState === "complete") {
+              progress = 100;
+              load_progress_el.style.width = progress + "%";
+              setTimeout(() => {
+                cp_preloader_el.style.opacity = 0;
+              }, 200);
+              setTimeout(function () {
+                cp_preloader_el.style.display = "none";
+              }, 1000);
+              clearInterval(progress_interval);
+              console.log("page loaded");
+            }
+          }, 100);
+        };
+        return cpp;
+      })();
+    </script>
+    <script>
+      cpPreloader.start("dark", 0.5);
+    </script>
+    <div class="image-gallery">
+      <img src="https://picsum.photos/5000/2500?random=1" alt="img" width="5000" style="max-width: 90%" />
+      <img src="https://picsum.photos/5000/2500?random=2" alt="img" width="5000" style="max-width: 90%" />
+      <img src="https://picsum.photos/5000/2500?random=3" alt="img" width="5000" style="max-width: 90%" />
+    </div>
+  </body>
+</html>
