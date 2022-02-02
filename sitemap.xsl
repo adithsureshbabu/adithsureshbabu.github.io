@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0"
 	xmlns:html="http://www.w3.org/TR/REC-html40"
 	xmlns:sitemap="http://www.sitemaps.org/schemas/sitemap/0.9"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:output method="html" version="1.0" encoding="utf-8" indent="yes" />
+	<xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes" />
 	<xsl:template match="/">
 		<html lang="en"
 			xmlns="http://www.w3.org/1999/xhtml">
 			<head>
-				<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+				<meta charset="UTF-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<base href="https://adithsuresh.github.io/"></base>
 				<title>Sitemap for adithsuresh.github.io</title>
