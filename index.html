@@ -71,6 +71,38 @@
         return len > 0 ? new Array(len).join(chr || "0") + this : this;
       };
 
+      var addFolderRow = function (name, dest, description, datetime) {
+        var tbody = document.getElementById("files-list");
+        var tr = tbody.insertRow(0);
+        var a = document.createElement("a");
+        if (!dest) dest = "#";
+        a.href = dest;
+        a.target = "_blank";
+        if (!name) name = "-";
+        a.innerText = name;
+        var td1 = tr.insertCell(0);
+        td1.appendChild(a);
+        td1.className = "rc-cell";
+        if (!description) description = "-";
+        var td2 = tr.insertCell(1);
+        td2.innerText = description;
+        td2.className = "rc-cell";
+        if (!datetime) {
+          var tempdate = Date.now();
+          var ld = new Date(tempdate),
+            formattedDate =
+              [ld.getFullYear(), (ld.getMonth() + 1).padLeft(), ld.getDate().padLeft()].join("-") +
+              " " +
+              [ld.getHours().padLeft(), ld.getMinutes().padLeft()].join(":");
+          var time = new Date(tempdate).getTime();
+          var date = formattedDate;
+        }
+        var td3 = tr.insertCell(2);
+        td3.innerText = date;
+        td3.setAttribute("data-sort", time);
+        td3.className = "rc-cell";
+      };
+
       var getLastModifiedDate = (...args) => {
         var result = {};
         var user = "adithsuresh";
@@ -158,6 +190,7 @@
             }
           }
         }
+        addFolderRow("pages", "./pages/", "directory");
         document.getElementById("content").style.display = "flex";
         getQuote();
       };
