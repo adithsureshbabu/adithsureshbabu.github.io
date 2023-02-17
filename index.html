@@ -74,12 +74,18 @@
       var addFolderRow = function (name, dest, description, datetime) {
         var tbody = document.getElementById("files-list");
         var tr = tbody.insertRow(0);
+        var img = document.createElement("img");
+        img.className = "icon";
+        img.src = "/images/icons/icon-folder.svg";
+        img.alt="dir";
+        var span = document.createElement("span");
+        span.innerText = name;
         var a = document.createElement("a");
+        a.appendChild(img);
+        a.appendChild(span);
         if (!dest) dest = "#";
         a.href = dest;
-        a.target = "_blank";
         if (!name) name = "-";
-        a.innerText = name;
         var td1 = tr.insertCell(0);
         td1.appendChild(a);
         td1.className = "rc-cell";
@@ -190,7 +196,7 @@
             }
           }
         }
-        addFolderRow("pages", "./pages/", "directory");
+        addFolderRow("pages/", "./pages/", "directory");
         document.getElementById("content").style.display = "flex";
         getQuote();
       };
