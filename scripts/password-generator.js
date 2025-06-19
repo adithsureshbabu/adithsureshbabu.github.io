@@ -2,7 +2,7 @@ var characters = {
   upperLetters: "QWERTYUIOPASDFGHJKLZXCVBNM",
   lowerLetters: "qwertyuiopasdfghjklzxcvbnm",
   numbers: "0123456789",
-  symbols: "~!@#$%^&*_.",
+  symbols: "~!@*",
 };
 
 String.prototype.shuffle = function () {
@@ -54,7 +54,7 @@ function getSymbol() {
 
 function generatePassword(length, options) {
   length = parseInt(length, 10);
-  if (length !== 0 && !length) length = length || 8;
+  if (length !== 0 && !length) length = length || 10;
   if (!options || (!options.upperletter && !options.lowerletter && !options.number && !options.symbol)) {
     options = {
       upperletter: true,
