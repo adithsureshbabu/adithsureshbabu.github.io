@@ -1,0 +1,1526 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repository Index</title>
+    <meta name="description" content="GitHub repository index." />
+    <meta name="color-scheme" content="light" />
+    <meta property="og:title" content="Repository Index" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="GitHub repository index." />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.github.com" crossorigin />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons (regular for most; fill weight for folder glyph) -->
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+
+    <!-- Neo-brutalist design system (plug-and-play bundle) -->
+    <link rel="stylesheet" href="/neo-brutalist/brutalist.css" />
+    <link rel="stylesheet" href="/neo-brutalist/brutalist-icons.css" />
+
+    <!-- Page-specific layout (self-contained in index.html) -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--nb-bg);
+        color: var(--nb-ink);
+        font-family: var(--nb-font-heading);
+        min-height: 100%;
+      }
+
+      /* [hidden] wins over NB display rules, except .nb-loader which uses its own fade-out. */
+      [hidden]:not(.nb-loader) {
+        display: none !important;
+      }
+
+      .container {
+        max-width: 1120px;
+        margin-inline: auto;
+        padding: 32px 24px 64px;
+      }
+
+      /* Keyboard skip link: hidden offscreen, revealed on focus. */
+      .skip-link {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 100;
+        padding: 8px 12px;
+        background: var(--nb-ink);
+        color: var(--nb-bg);
+        font-family: var(--nb-font-mono);
+        font-weight: 700;
+        text-decoration: none;
+        border: var(--nb-border-sm);
+        transform: translateY(-200%);
+      }
+      .skip-link:focus {
+        transform: translateY(0);
+        outline: 3px solid var(--nb-accent-3);
+        outline-offset: 2px;
+      }
+
+      /* Hero */
+      .hero {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+          "avatar title"
+          "avatar desc"
+          "stats  stats"
+          "link   cache";
+        gap: 12px 16px;
+        margin-bottom: 24px;
+      }
+      .hero-avatar {
+        grid-area: avatar;
+        width: 64px;
+        height: 64px;
+        border: var(--nb-border-sm);
+        box-shadow: var(--nb-shadow-sm);
+        object-fit: cover;
+        background: var(--nb-surface);
+      }
+      .hero-name {
+        grid-area: title;
+        font-size: clamp(22px, 3.5vw, 32px);
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        line-height: 1.1;
+        margin: 0;
+        word-break: break-word;
+      }
+      .hero-desc {
+        grid-area: desc;
+        font-family: var(--nb-font-mono);
+        font-size: 13px;
+        color: var(--nb-ink-muted);
+        margin: 0;
+      }
+      .hero-stats {
+        grid-area: stats;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 4px;
+      }
+      .hero-stats .nb-badge.accent-star {
+        background: var(--nb-accent-3);
+      }
+      .hero-stats .nb-badge.accent-fork {
+        background: var(--nb-accent-2);
+      }
+      .hero-stats .nb-badge.accent-watch {
+        background: var(--nb-accent-4);
+      }
+
+      .hero-link {
+        /* .nb-btn supplies inline-flex + align-items; gap spaces label and icon. */
+        grid-area: link;
+        justify-self: start;
+        text-decoration: none;
+        gap: 8px;
+      }
+      .hero-cache-label {
+        grid-area: cache;
+        align-self: center;
+        justify-self: end;
+        margin: 0;
+        min-height: 16px;
+      }
+
+      /* Breadcrumbs */
+      .breadcrumbs {
+        font-family: var(--nb-font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--nb-ink);
+        margin-bottom: 16px;
+      }
+      .breadcrumbs ol {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 8px;
+        margin: 0;
+        padding: 0;
+      }
+      .breadcrumbs a {
+        color: var(--nb-ink);
+        text-decoration: none;
+        padding: 4px 6px;
+        border: 2px solid transparent;
+      }
+      .breadcrumbs a:hover {
+        background: var(--nb-accent-1);
+      }
+      .breadcrumbs a:focus-visible {
+        outline: 3px solid var(--nb-ink);
+        outline-offset: 2px;
+      }
+      .breadcrumbs .sep {
+        color: var(--nb-ink-muted);
+        user-select: none;
+      }
+
+      /* Full-width alert. .nb-badge is content-box and shadow-less (for inline
+         pills), so we restyle locally to match the adjacent nb-cards. */
+      .ratelimit-banner {
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        background: #ffb4b4;
+        color: var(--nb-ink);
+        font-family: var(--nb-font-mono);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-align: center;
+        border: var(--nb-border-sm);
+        box-shadow: 5px 5px 0 var(--nb-ink);
+      }
+
+      /* File explorer */
+      .explorer {
+        padding: 0;
+      }
+      .file-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: var(--nb-font-mono);
+        font-size: 13px;
+      }
+      .file-table thead tr {
+        background: var(--nb-accent-1);
+      }
+      .file-table th {
+        text-align: left;
+        padding: 12px 16px;
+        font-family: var(--nb-font-mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--nb-ink);
+        border-bottom: var(--nb-border-sm);
+      }
+      .file-table th.col-size {
+        text-align: right;
+      }
+      .file-table td {
+        padding: 0;
+        border-top: 2px solid var(--nb-ink);
+        vertical-align: middle;
+      }
+      .file-table tbody tr:hover {
+        background: var(--nb-accent-4);
+      }
+      .file-table tbody tr:has(a:focus-visible) {
+        background: var(--nb-accent-4);
+      }
+      .file-table td a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        color: inherit;
+        text-decoration: none;
+        min-height: 44px;
+      }
+      .file-table td.cell-size {
+        padding: 12px 16px;
+        text-align: right;
+        color: var(--nb-ink-muted);
+        font-size: 12px;
+      }
+      /* Repos mode cells */
+      .file-table td.cell-desc {
+        padding: 12px 16px;
+        color: var(--nb-ink);
+        font-size: 13px;
+      }
+      .file-table td.cell-date {
+        padding: 12px 16px;
+        color: var(--nb-ink-muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .file-table td.cell-empty {
+        padding: 16px;
+        color: var(--nb-ink-muted);
+        font-style: italic;
+        text-align: center;
+      }
+      .file-icon {
+        color: var(--nb-ink);
+      }
+      .file-icon.folder {
+        color: var(--nb-accent-3);
+      }
+
+      /* Error card */
+      .error-card {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        text-align: left;
+        box-shadow: 5px 5px 0 var(--nb-error);
+        border-color: var(--nb-ink);
+      }
+      .error-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--nb-error);
+      }
+      .error-card h2 {
+        font-size: 20px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
+        color: var(--nb-ink);
+      }
+      .error-card p {
+        font-family: var(--nb-font-mono);
+        font-size: 13px;
+        color: var(--nb-ink);
+        margin: 0;
+      }
+      .error-card .error-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 640px) {
+        .hero {
+          grid-template-columns: 1fr;
+          grid-template-areas:
+            "avatar"
+            "title"
+            "desc"
+            "stats"
+            "link"
+            "cache";
+        }
+        .hero-cache-label {
+          justify-self: start;
+        }
+      }
+
+      /* Belt-and-braces for prefers-reduced-motion if the NB bundle doesn't honor it. */
+      @media (prefers-reduced-motion: reduce) {
+        .nb-loader-block {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#fileList">Skip to files</a>
+    <div id="loader" class="nb-loader">
+      <div class="nb-loader-blocks" aria-hidden="true">
+        <span class="nb-loader-block"></span>
+        <span class="nb-loader-block"></span>
+        <span class="nb-loader-block"></span>
+        <span class="nb-loader-block"></span>
+      </div>
+    </div>
+
+    <main id="appMain" class="container" aria-label="Repository files" aria-busy="true">
+      <div id="mainContent" hidden>
+        <header class="hero nb-card">
+          <img id="repoAvatar" class="hero-avatar" width="64" height="64" alt="" />
+          <h1 id="repoName" class="hero-name">owner/repo</h1>
+          <p id="repoDescription" class="hero-desc"></p>
+          <div class="hero-stats">
+            <span id="repoStars" class="nb-badge accent-star">
+              <i class="ph ph-star nb-icon nb-icon--sm" aria-hidden="true"></i>
+              <span class="badge-count">— STARS</span>
+            </span>
+            <span id="repoForks" class="nb-badge accent-fork">
+              <i class="ph ph-git-fork nb-icon nb-icon--sm" aria-hidden="true"></i>
+              <span class="badge-count">— FORKS</span>
+            </span>
+            <span id="repoWatchers" class="nb-badge accent-watch">
+              <i class="ph ph-eye nb-icon nb-icon--sm" aria-hidden="true"></i>
+              <span class="badge-count">— WATCHERS</span>
+            </span>
+          </div>
+          <a id="repoLink" class="hero-link nb-btn nb-btn--active" href="#" target="_blank" rel="noopener noreferrer">
+            <span>VIEW ON GITHUB</span>
+            <i class="ph ph-arrow-square-out nb-icon" aria-hidden="true"></i>
+          </a>
+          <p id="repoCacheLabel" class="hero-cache-label nb-card-label" hidden></p>
+        </header>
+
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <ol id="breadcrumbs">
+            <li><a href="#" data-path="">Root</a></li>
+          </ol>
+        </nav>
+
+        <div id="ratelimitBanner" class="ratelimit-banner" role="alert" hidden></div>
+
+        <section class="explorer nb-card">
+          <table class="file-table">
+            <caption class="nb-sr-only">
+              Files in current directory
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">NAME</th>
+                <th scope="col" class="col-size">SIZE</th>
+              </tr>
+            </thead>
+            <tbody id="fileList"></tbody>
+          </table>
+        </section>
+      </div>
+
+      <div id="statusAnnouncer" class="nb-sr-only" role="status"></div>
+
+      <div id="errorContent" hidden>
+        <section class="nb-card error-card" role="alert">
+          <div class="error-heading">
+            <i class="ph ph-warning nb-icon nb-icon--lg" role="img" aria-label="Warning"></i>
+            <h2 id="errorTitle" tabindex="-1">SOMETHING WENT WRONG</h2>
+          </div>
+          <p id="errorMessage"></p>
+          <div class="error-actions">
+            <button id="errorRetry" class="nb-btn nb-btn--active" type="button" hidden>
+              <i class="ph ph-arrow-clockwise nb-icon" aria-hidden="true"></i>
+              <span>RETRY</span>
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      // Resolve { owner, repo, basePath } from the URL. Precedence: ?o=&r=&p=
+      // override → github.io path (probed to disambiguate project-page repo vs
+      // user-pages subfolder) → bare github.io root → demo fallback.
+      // Probe /repos/:owner/:repo for has_pages. Inconclusive on rate-limit/network errors.
+      const probeHasPages = async (owner, repo) => {
+        try {
+          const res = await fetch(
+            `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`,
+            { headers: { Accept: "application/vnd.github+json" } }
+          );
+          if (res.status === 404) return { ok: true, hasPages: false };
+          if (res.ok) return { ok: true, hasPages: Boolean((await res.json()).has_pages) };
+          return { ok: false };
+        } catch {
+          return { ok: false };
+        }
+      };
+
+      const resolveTarget = async () => {
+        const url = new URL(window.location.href);
+        const qOwner = url.searchParams.get("o");
+        const qRepo = url.searchParams.get("r");
+        const qPath = url.searchParams.get("p") || "";
+        if (qOwner && qRepo) return { owner: qOwner, repo: qRepo, basePath: qPath };
+
+        const host = url.hostname;
+        if (!host.endsWith("github.io")) {
+          return { owner: "freeCodeCamp", repo: "freeCodeCamp", basePath: "" };
+        }
+
+        const owner = host.split(".")[0];
+        // Strip trailing /index.html so segs only contains directory parts.
+        const pathname = url.pathname.replace(/\/index\.html$/i, "/");
+        const segs = pathname.split("/").filter(Boolean);
+
+        if (segs.length === 0) return { owner, repo: `${owner}.github.io`, basePath: "" };
+
+        const firstSeg = segs[0];
+        const probe = await probeHasPages(owner, firstSeg);
+        if (probe.ok && probe.hasPages) {
+          return { owner, repo: firstSeg, basePath: segs.slice(1).join("/") };
+        }
+        if (probe.ok) {
+          return { owner, repo: `${owner}.github.io`, basePath: segs.join("/") };
+        }
+        // Probe inconclusive (rate-limit, network blip) — fall back to the old
+        // heuristic so the page still loads something sensible.
+        return { owner, repo: firstSeg, basePath: "" };
+      };
+
+      const TARGET = await resolveTarget();
+      // "repos" mode lists the user's public repos with a homepage set;
+      // triggered when we're aimed at a user-pages repo's root. Everything
+      // else stays in "files" mode (the repo file-tree browser).
+      const MODE = TARGET.basePath === "" && TARGET.repo === `${TARGET.owner}.github.io` ? "repos" : "files";
+      document.title =
+        MODE === "repos"
+          ? "Index of /"
+          : TARGET.basePath
+            ? `${TARGET.owner}/${TARGET.repo}/${TARGET.basePath}`
+            : `${TARGET.owner}/${TARGET.repo}`;
+
+      const $ = id => document.getElementById(id);
+      // Decode location.hash so folder names with spaces/#/? match dirIndex keys.
+      const currentHashPath = () => {
+        try {
+          return decodeURIComponent(window.location.hash.replace(/^#/, ""));
+        } catch {
+          return "";
+        }
+      };
+      const dom = {
+        loader: $("loader"),
+        appMain: $("appMain"),
+        main: $("mainContent"),
+        errorView: $("errorContent"),
+        errorTitle: $("errorTitle"),
+        errorMessage: $("errorMessage"),
+        errorRetry: $("errorRetry"),
+        avatar: $("repoAvatar"),
+        name: $("repoName"),
+        description: $("repoDescription"),
+        stars: $("repoStars"),
+        forks: $("repoForks"),
+        watchers: $("repoWatchers"),
+        link: $("repoLink"),
+        cacheLabel: $("repoCacheLabel"),
+        ratelimit: $("ratelimitBanner"),
+        fileList: $("fileList"),
+        breadcrumbs: $("breadcrumbs"),
+        announcer: $("statusAnnouncer")
+      };
+
+      const state = {
+        repo: null,
+        tree: null,
+        dirIndex: null,
+        currentPath: "",
+        repos: null, // populated in "repos" mode
+        lastMods: null // { repoName: iso } in "repos" mode
+      };
+
+      // Typed errors let handleError switch on `instanceof` and keep stack traces.
+      class GitHubError extends Error {
+        constructor(message) {
+          super(message);
+          this.name = "GitHubError";
+        }
+      }
+      class RateLimitError extends GitHubError {
+        constructor(resetAt) {
+          super("GitHub rate limit reached");
+          this.name = "RateLimitError";
+          this.resetAt = resetAt;
+        }
+      }
+      class NotFoundError extends GitHubError {
+        constructor() {
+          super("Repository not found");
+          this.name = "NotFoundError";
+        }
+      }
+      class HttpError extends GitHubError {
+        constructor(status) {
+          super(`GitHub HTTP ${status}`);
+          this.name = "HttpError";
+          this.status = status;
+        }
+      }
+
+      // Aborts any in-flight fetch before starting a new one — prevents stale responses racing the render.
+      let currentAbort = null;
+      const newAbortController = () => {
+        if (currentAbort) currentAbort.abort();
+        currentAbort = new AbortController();
+        return currentAbort;
+      };
+
+      const repoApiPath = (suffix = "") =>
+        `/repos/${encodeURIComponent(TARGET.owner)}/${encodeURIComponent(TARGET.repo)}${suffix}`;
+
+      const treePath = branch => repoApiPath(`/git/trees/${encodeURIComponent(branch)}?recursive=1`);
+
+      const userReposPath = () => `/users/${encodeURIComponent(TARGET.owner)}/repos?per_page=100`;
+      const branchPath = (owner, repo, branch) =>
+        `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/branches/${encodeURIComponent(branch)}`;
+
+      // Encode path segments individually so "/" stays a separator but "#"/"?" escape.
+      const blobUrl = entryPath => {
+        const branch = state.repo?.default_branch || "main";
+        const enc = str => str.split("/").map(encodeURIComponent).join("/");
+        const owner = encodeURIComponent(TARGET.owner);
+        const repo = encodeURIComponent(TARGET.repo);
+        return `https://github.com/${owner}/${repo}/blob/${enc(branch)}/${enc(entryPath)}`;
+      };
+
+      // Pages-exclusive MIMEs (HTML, images, media). Only used when PAGES_BASE set.
+      const PAGES_RENDERABLE = new Set([
+        "html",
+        "htm",
+        "xhtml",
+        "png",
+        "jpg",
+        "jpeg",
+        "gif",
+        "webp",
+        "avif",
+        "bmp",
+        "ico",
+        "svg",
+        "pdf",
+        "mp3",
+        "wav",
+        "ogg",
+        "mp4",
+        "webm"
+      ]);
+
+      // raw.githubusercontent serves non-images as text/plain — inline text
+      // rendering that works for foreign repos and unusual extensions (.toml,
+      // .jsonc, .yaml) that Pages would force-download as octet-stream.
+      const RAW_RENDERABLE = new Set([
+        "txt",
+        "log",
+        "csv",
+        "tsv",
+        "css",
+        "js",
+        "mjs",
+        "json",
+        "jsonc",
+        "xml",
+        "yaml",
+        "yml",
+        "toml",
+        "ini",
+        "conf",
+        "env"
+      ]);
+
+      // Pages base URL when the app is served from TARGET's own deployment;
+      // every repo file is then live at `${PAGES_BASE}<path>` with correct MIME.
+      // Null for foreign repos (?o=&r=) or local dev.
+      const PAGES_BASE = (() => {
+        const url = new URL(window.location.href);
+        if (!url.hostname.endsWith("github.io")) return null;
+        if (url.hostname.split(".")[0] !== TARGET.owner) return null;
+        if (TARGET.repo === `${TARGET.owner}.github.io`) return `${url.origin}/`;
+        // Project pages only confirmed when this page itself lives under /<repo>/.
+        const firstSeg = url.pathname.split("/").filter(Boolean)[0];
+        if (firstSeg && firstSeg === TARGET.repo) {
+          return `${url.origin}/${encodeURIComponent(firstSeg)}/`;
+        }
+        return null;
+      })();
+
+      const pagesUrl = entryPath => {
+        const enc = str => str.split("/").map(encodeURIComponent).join("/");
+        return `${PAGES_BASE}${enc(entryPath)}`;
+      };
+
+      const rawUrl = entryPath => {
+        const branch = state.repo?.default_branch || "main";
+        const enc = str => str.split("/").map(encodeURIComponent).join("/");
+        const owner = encodeURIComponent(TARGET.owner);
+        const repo = encodeURIComponent(TARGET.repo);
+        return `https://raw.githubusercontent.com/${owner}/${repo}/${enc(branch)}/${enc(entryPath)}`;
+      };
+
+      // Dispatch: text → raw (text/plain, works for foreign repos), HTML/images/
+      // media → Pages (needs own deployment), else → GitHub blob. Entry paths
+      // are basePath-relative; re-absolutize before handing to URL builders.
+      const fileUrl = entry => {
+        const fullPath = TARGET.basePath ? `${TARGET.basePath}/${entry.path}` : entry.path;
+        const dot = entry.name.lastIndexOf(".");
+        const ext = dot === -1 ? "" : entry.name.slice(dot + 1).toLowerCase();
+        if (RAW_RENDERABLE.has(ext)) return rawUrl(fullPath);
+        if (PAGES_BASE && PAGES_RENDERABLE.has(ext)) return pagesUrl(fullPath);
+        return blobUrl(fullPath);
+      };
+
+      // GitHub API wrapper: ETag conditional, typed errors for rate-limit / 404.
+      const githubFetch = async (path, { etag, signal } = {}) => {
+        const headers = { Accept: "application/vnd.github+json" };
+        if (etag) headers["If-None-Match"] = etag;
+        const res = await fetch(`https://api.github.com${path}`, { headers, signal });
+
+        if (res.status === 304) return { status: 304, etag };
+        if (res.status === 403) {
+          const remaining = res.headers.get("X-RateLimit-Remaining");
+          if (remaining === "0") {
+            const rawReset = res.headers.get("X-RateLimit-Reset");
+            const resetEpoch = rawReset ? parseInt(rawReset, 10) : 0;
+            // Missing reset header → null so UI shows "shortly" not a 1970 clock.
+            const resetAt = resetEpoch > 0 ? new Date(resetEpoch * 1000) : null;
+            throw new RateLimitError(resetAt);
+          }
+          throw new HttpError(403);
+        }
+        if (res.status === 404) throw new NotFoundError();
+        if (!res.ok) throw new HttpError(res.status);
+        return { status: 200, body: await res.json(), etag: res.headers.get("ETag") };
+      };
+
+      // Visibility matrix per logical app state; loader uses the NB fade-out.
+      const VIEWS = {
+        loader: { loader: false, main: true, error: true, busy: "true" },
+        main: { loader: true, main: false, error: true, busy: "false" },
+        error: { loader: true, main: true, error: false, busy: "false" }
+      };
+
+      const showView = name => {
+        const v = VIEWS[name];
+        dom.loader.hidden = v.loader;
+        dom.main.hidden = v.main;
+        dom.errorView.hidden = v.error;
+        dom.appMain.setAttribute("aria-busy", v.busy);
+      };
+
+      const showError = ({ title, message, showRetry }) => {
+        showView("error");
+        dom.errorTitle.textContent = title;
+        dom.errorMessage.textContent = message;
+        dom.errorRetry.hidden = !showRetry;
+        // h2 has tabindex="-1" so focus lands SR users on the alert without
+        // adding it to the tab order.
+        dom.errorTitle.focus();
+      };
+
+      const formatCount = n => (n == null ? "—" : n.toLocaleString());
+
+      const formatBytes = bytes => {
+        if (bytes == null) return "—";
+        if (bytes === 0) return "0 B";
+        const units = ["B", "KB", "MB", "GB", "TB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+        return `${parseFloat((bytes / 1024 ** i).toFixed(1))} ${units[i]}`;
+      };
+
+      const formatHHMM = (d = new Date()) => d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+      // ISO → "YYYY-MM-DD HH:MM" (local), matching the existing root index format.
+      const formatDate = iso => {
+        if (!iso) return "—";
+        const d = new Date(iso);
+        if (isNaN(d)) return "—";
+        const p = n => String(n).padStart(2, "0");
+        return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+      };
+
+      const ICON_BY_EXT = {
+        md: "ph-file-text",
+        json: "ph-brackets-curly",
+        jsonc: "ph-brackets-curly",
+        toml: "ph-gear",
+        yml: "ph-gear",
+        yaml: "ph-gear",
+        conf: "ph-gear",
+        png: "ph-image",
+        jpg: "ph-image",
+        jpeg: "ph-image",
+        gif: "ph-image",
+        svg: "ph-image",
+        webp: "ph-image",
+        zip: "ph-file-archive",
+        tar: "ph-file-archive",
+        gz: "ph-file-archive",
+        rar: "ph-file-archive",
+        pdf: "ph-file-pdf"
+      };
+
+      // Folders use Phosphor "fill" weight for a solid shape vs outlined files.
+      const iconFor = (name, type) => {
+        if (type === "dir") return { cls: "ph-folder", weight: "ph-fill", isFolder: true };
+        // Dotfiles have no real extension — render them as config glyphs.
+        if (name.startsWith(".")) return { cls: "ph-gear", weight: "ph", isFolder: false };
+        const dot = name.lastIndexOf(".");
+        const ext = dot === -1 ? "" : name.slice(dot + 1).toLowerCase();
+        return { cls: ICON_BY_EXT[ext] || "ph-file", weight: "ph", isFolder: false };
+      };
+
+      const CACHE_PREFIX = "cupuacu:";
+      const CACHE_VERSION = "v1";
+      const CACHE_KEY = `${CACHE_PREFIX}${CACHE_VERSION}:${TARGET.owner}/${TARGET.repo}:${MODE}`;
+      const CACHE_MAX_BYTES = 3_000_000;
+
+      // Evict prior-version cache entries left behind after a CACHE_VERSION bump.
+      const sweepStaleCache = () => {
+        const currentPrefix = `${CACHE_PREFIX}${CACHE_VERSION}:`;
+        try {
+          for (let i = localStorage.length - 1; i >= 0; i--) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith(CACHE_PREFIX) && !k.startsWith(currentPrefix)) {
+              localStorage.removeItem(k);
+            }
+          }
+        } catch (err) {
+          console.warn("Cache sweep failed:", err);
+        }
+      };
+      sweepStaleCache();
+
+      const readCache = () => {
+        try {
+          const raw = localStorage.getItem(CACHE_KEY);
+          if (!raw) return null;
+          const parsed = JSON.parse(raw);
+          if (!parsed) return null;
+          const validForMode =
+            MODE === "repos" ? Array.isArray(parsed.repos) && parsed.repo && parsed.tree : parsed.repo && parsed.tree;
+          if (!validForMode) return null;
+          return parsed;
+        } catch (err) {
+          // Corrupted entry: drop it so the next write starts clean.
+          console.warn("Cache parse failed:", err);
+          try {
+            localStorage.removeItem(CACHE_KEY);
+          } catch {
+            /* storage may be disabled — nothing to clean */
+          }
+          return null;
+        }
+      };
+
+      const writeCache = entry => {
+        try {
+          const serialized = JSON.stringify(entry);
+          if (serialized.length > CACHE_MAX_BYTES) {
+            console.warn("Cache skipped: payload", serialized.length, "bytes exceeds soft limit of", CACHE_MAX_BYTES);
+            return;
+          }
+          localStorage.setItem(CACHE_KEY, serialized);
+        } catch (err) {
+          console.warn("Cache write failed (quota or storage disabled):", err);
+        }
+      };
+
+      const setCacheLabel = text => {
+        dom.cacheLabel.textContent = text;
+        dom.cacheLabel.hidden = false;
+      };
+
+      const showRateLimitBanner = resetAt => {
+        const when = resetAt ? formatHHMM(resetAt) : "SHORTLY";
+        dom.ratelimit.textContent = `RATE-LIMITED · SHOWING CACHED DATA · RESETS ${when}`;
+        dom.ratelimit.hidden = false;
+      };
+
+      const announceDirectory = path => {
+        const label = path || "root";
+        const count = state.dirIndex?.get(path)?.length || 0;
+        dom.announcer.textContent = `Showing ${count} items in ${label}`;
+      };
+
+      // Group tree nodes by parent path into a Map. When basePath is set,
+      // entries outside that subtree are skipped and paths stored relative to
+      // basePath; URL builders re-add the prefix when linking out.
+      const buildDirIndex = (tree, basePath = "") => {
+        // Pre-seed root so deeply-nested-only repos still render cleanly.
+        const map = new Map();
+        map.set("", []);
+        const prefix = basePath ? `${basePath}/` : "";
+        for (const node of tree) {
+          let path = node.path;
+          if (prefix) {
+            if (!path.startsWith(prefix)) continue;
+            path = path.slice(prefix.length);
+          }
+          const lastSlash = path.lastIndexOf("/");
+          const parent = lastSlash === -1 ? "" : path.slice(0, lastSlash);
+          const name = lastSlash === -1 ? path : path.slice(lastSlash + 1);
+          const entry = {
+            name,
+            path,
+            type: node.type === "tree" ? "dir" : "file",
+            size: node.type === "blob" ? node.size : null
+          };
+          if (!map.has(parent)) map.set(parent, []);
+          map.get(parent).push(entry);
+          // Register dir entries as their own keys so empty folders are
+          // navigable and render as "Empty folder" instead of falling back to root.
+          if (entry.type === "dir" && !map.has(path)) map.set(path, []);
+        }
+        for (const list of map.values()) {
+          list.sort((a, b) => {
+            if (a.type !== b.type) return a.type === "dir" ? -1 : 1;
+            return a.name.localeCompare(b.name);
+          });
+        }
+        return map;
+      };
+
+      const makeIcon = ({ cls, weight = "ph", isFolder = false }) => {
+        const i = document.createElement("i");
+        i.className = `${weight} ${cls} nb-icon file-icon${isFolder ? " folder" : ""}`;
+        i.setAttribute("aria-hidden", "true");
+        return i;
+      };
+
+      const makeSpan = (text, className) => {
+        const s = document.createElement("span");
+        if (className) s.className = className;
+        s.textContent = text;
+        return s;
+      };
+
+      // Build a hash URL for a folder path honoring the current mode's scheme:
+      // repos mode uses "#/" prefix to signal files view, files mode uses "#path".
+      const hashForPath = p => (MODE === "repos" ? `#${repoPathToHash(p)}` : p ? `#${p}` : "#");
+
+      const buildParentRow = parentPath => {
+        const tr = document.createElement("tr");
+        const tdName = document.createElement("td");
+        const a = document.createElement("a");
+        a.href = hashForPath(parentPath);
+        a.dataset.path = parentPath;
+        a.dataset.type = "dir";
+        a.setAttribute("aria-label", "Parent directory");
+        a.appendChild(makeIcon({ cls: "ph-arrow-up-left" }));
+        a.appendChild(makeSpan(".."));
+        tdName.appendChild(a);
+        tr.appendChild(tdName);
+
+        const tdSize = document.createElement("td");
+        tdSize.className = "cell-size";
+        tdSize.textContent = "—";
+        tr.appendChild(tdSize);
+        return tr;
+      };
+
+      const buildEmptyRow = () => {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 2;
+        td.className = "cell-empty";
+        td.textContent = "Empty folder";
+        tr.appendChild(td);
+        return tr;
+      };
+
+      const buildRow = entry => {
+        const tr = document.createElement("tr");
+        const tdName = document.createElement("td");
+        const a = document.createElement("a");
+
+        if (entry.type === "dir") {
+          a.href = hashForPath(entry.path);
+        } else {
+          a.href = fileUrl(entry);
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+        }
+        a.dataset.path = entry.path;
+        a.dataset.type = entry.type;
+
+        a.appendChild(makeIcon(iconFor(entry.name, entry.type)));
+        a.appendChild(makeSpan(entry.name));
+        tdName.appendChild(a);
+        tr.appendChild(tdName);
+
+        const tdSize = document.createElement("td");
+        tdSize.className = "cell-size";
+        tdSize.textContent = formatBytes(entry.size);
+        tr.appendChild(tdSize);
+        return tr;
+      };
+
+      const renderFileList = path => {
+        const rows = state.dirIndex.get(path) || [];
+        // Build in a DocumentFragment so the whole update is one reflow
+        // regardless of row count.
+        const frag = document.createDocumentFragment();
+        if (path !== "") {
+          const parent = path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "";
+          frag.appendChild(buildParentRow(parent));
+        }
+        if (rows.length === 0) {
+          frag.appendChild(buildEmptyRow());
+        } else {
+          for (const entry of rows) frag.appendChild(buildRow(entry));
+        }
+        dom.fileList.replaceChildren(frag);
+      };
+
+      // In repos mode the hash doubles as a view switch: "" → repos-list view,
+      // anything with a leading "/" → files view into the self-repo at that
+      // path ("/" = self root, "/pages" = self/pages).
+      const hashToRepoPath = h => (h.startsWith("/") ? h.slice(1) : null);
+      const repoPathToHash = p => (p === null ? "" : "/" + p);
+
+      // Swap thead/caption/breadcrumbs/title for the current repos-mode view.
+      // path === null → list view; string → files view at that path.
+      const adaptReposModeLayout = path => {
+        const thead = document.querySelector(".file-table thead");
+        const caption = document.querySelector(".file-table caption");
+        const nav = dom.breadcrumbs.parentElement;
+        thead.replaceChildren();
+        const tr = document.createElement("tr");
+        if (path === null) {
+          for (const label of ["NAME", "DESCRIPTION", "LAST MOD"]) {
+            const th = document.createElement("th");
+            th.scope = "col";
+            th.textContent = label;
+            tr.appendChild(th);
+          }
+          caption.textContent = "Public repositories";
+          nav.hidden = true;
+          document.title = "Index of /";
+        } else {
+          const thName = document.createElement("th");
+          thName.scope = "col";
+          thName.textContent = "NAME";
+          const thSize = document.createElement("th");
+          thSize.scope = "col";
+          thSize.className = "col-size";
+          thSize.textContent = "SIZE";
+          tr.appendChild(thName);
+          tr.appendChild(thSize);
+          caption.textContent = path ? `Files in /${path}` : "Files in self repository";
+          nav.hidden = false;
+          document.title = path ? `Index of /${path}` : "Index of /";
+        }
+        thead.appendChild(tr);
+      };
+
+      const renderDirectoryView = path => {
+        if (MODE === "repos") {
+          adaptReposModeLayout(path);
+          if (path === null) {
+            renderRepoList();
+            return;
+          }
+          renderBreadcrumbs(path);
+          renderFileList(path);
+          return;
+        }
+        renderBreadcrumbs(path);
+        renderFileList(path);
+      };
+
+      // Repos mode: each row is a public repo with a homepage set. Clicking
+      // opens the homepage in a new tab (matches existing root-index behavior).
+      const buildRepoRow = (repo, lastMod) => {
+        const tr = document.createElement("tr");
+
+        const tdName = document.createElement("td");
+        const a = document.createElement("a");
+        a.href = repo.homepage || repo.html_url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.appendChild(makeIcon({ cls: "ph-globe" }));
+        a.appendChild(makeSpan(repo.name));
+        tdName.appendChild(a);
+        tr.appendChild(tdName);
+
+        const tdDesc = document.createElement("td");
+        tdDesc.className = "cell-desc";
+        tdDesc.textContent = repo.description || "—";
+        tr.appendChild(tdDesc);
+
+        const tdDate = document.createElement("td");
+        tdDate.className = "cell-date";
+        tdDate.textContent = formatDate(lastMod);
+        tr.appendChild(tdDate);
+
+        return tr;
+      };
+
+      // Synthetic row for the user-pages repo itself — clicking navigates into
+      // files view (hash "#/") instead of opening externally.
+      const buildSelfRow = () => {
+        const tr = document.createElement("tr");
+        const tdName = document.createElement("td");
+        const a = document.createElement("a");
+        a.href = "#/";
+        a.dataset.path = "";
+        a.dataset.type = "dir";
+        a.appendChild(makeIcon({ cls: "ph-house", weight: "ph-fill" }));
+        a.appendChild(makeSpan(TARGET.repo));
+        tdName.appendChild(a);
+        tr.appendChild(tdName);
+
+        const tdDesc = document.createElement("td");
+        tdDesc.className = "cell-desc";
+        tdDesc.textContent = state.repo?.description || "Browse this repository";
+        tr.appendChild(tdDesc);
+
+        const tdDate = document.createElement("td");
+        tdDate.className = "cell-date";
+        tdDate.textContent = formatDate(state.repo?.pushed_at);
+        tr.appendChild(tdDate);
+        return tr;
+      };
+
+      const renderRepoList = () => {
+        const frag = document.createDocumentFragment();
+        // Self-repo row first — the entry point into files view.
+        if (state.repo) frag.appendChild(buildSelfRow());
+        const repos = state.repos || [];
+        if (repos.length === 0 && !state.repo) {
+          const tr = document.createElement("tr");
+          const td = document.createElement("td");
+          td.colSpan = 3;
+          td.className = "cell-empty";
+          td.textContent = "No public repositories with a homepage";
+          tr.appendChild(td);
+          frag.appendChild(tr);
+        } else {
+          for (const r of repos) frag.appendChild(buildRepoRow(r, state.lastMods?.[r.name]));
+        }
+        dom.fileList.replaceChildren(frag);
+      };
+
+      // Hero in repos mode: show the user's avatar + login, no repo stats.
+      const renderReposHero = ownerLogin => {
+        dom.avatar.src = `https://github.com/${encodeURIComponent(ownerLogin)}.png`;
+        dom.avatar.alt = `${ownerLogin} avatar`;
+        dom.name.textContent = ownerLogin;
+        dom.description.textContent = "Public repositories";
+        dom.stars.hidden = true;
+        dom.forks.hidden = true;
+        dom.watchers.hidden = true;
+        dom.link.href = `https://github.com/${encodeURIComponent(ownerLogin)}`;
+      };
+
+      // Navigate to a folder path, update history, re-render, and rehome focus.
+      // In repos mode, path === null routes to the repos-list view (clears hash);
+      // a string routes to files view at that path (hash "#/" + path).
+      const navigateTo = (path, { push = true } = {}) => {
+        let targetPath;
+        if (MODE === "repos" && path === null) {
+          targetPath = null;
+        } else {
+          targetPath = state.dirIndex.has(path) ? path : "";
+        }
+        state.currentPath = targetPath;
+
+        const buildUrl = p => {
+          if (MODE === "repos") {
+            return p === null ? location.pathname + location.search : `#${repoPathToHash(p)}`;
+          }
+          return p ? `#${p}` : "#";
+        };
+
+        if (push) {
+          history.pushState({ path: targetPath }, "", buildUrl(targetPath));
+        } else if (targetPath !== path) {
+          // Manual URL edit hit a missing folder — rewrite the bar to match.
+          history.replaceState({ path: targetPath }, "", buildUrl(targetPath));
+        }
+        renderDirectoryView(targetPath);
+        announceDirectory(targetPath === null ? "" : targetPath);
+        // replaceChildren just dropped the focused anchor; rehome focus
+        // instead of letting it fall back to <body>.
+        window.scrollTo({ top: 0, behavior: "instant" });
+        const firstLink = dom.fileList.querySelector("a");
+        if (firstLink) firstLink.focus({ preventScroll: true });
+      };
+
+      const renderBreadcrumbs = path => {
+        const ol = dom.breadcrumbs;
+        ol.replaceChildren();
+
+        // Keep natural case in the DOM (CSS uppercases it); some SRs spell
+        // all-caps text letter-by-letter.
+        const rootLi = document.createElement("li");
+        const rootA = document.createElement("a");
+        rootA.href = hashForPath("");
+        rootA.dataset.path = "";
+        rootA.textContent = "Root";
+        if (!path) rootA.setAttribute("aria-current", "page");
+        rootLi.appendChild(rootA);
+        ol.appendChild(rootLi);
+
+        if (!path) return;
+
+        let acc = "";
+        const segments = path.split("/");
+        segments.forEach((seg, idx) => {
+          acc = acc ? `${acc}/${seg}` : seg;
+
+          const sep = document.createElement("li");
+          sep.className = "sep";
+          sep.setAttribute("aria-hidden", "true");
+          sep.textContent = "/";
+          ol.appendChild(sep);
+
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = hashForPath(acc);
+          a.dataset.path = acc;
+          a.textContent = seg;
+          if (idx === segments.length - 1) a.setAttribute("aria-current", "page");
+          li.appendChild(a);
+          ol.appendChild(li);
+        });
+      };
+
+      const renderHero = repo => {
+        if (repo.owner?.avatar_url) dom.avatar.src = repo.owner.avatar_url;
+        dom.avatar.alt = `${repo.owner?.login || ""} avatar`;
+        dom.name.textContent = repo.full_name;
+        dom.description.textContent = repo.description || "No description";
+        dom.stars.querySelector(".badge-count").textContent = `${formatCount(repo.stargazers_count)} STARS`;
+        dom.forks.querySelector(".badge-count").textContent = `${formatCount(repo.forks_count)} FORKS`;
+        // subscribers_count is the true watcher count; watchers_count aliases stargazers_count.
+        dom.watchers.querySelector(".badge-count").textContent = `${formatCount(repo.subscribers_count)} WATCHERS`;
+        if (TARGET.basePath) {
+          const branch = repo.default_branch || "main";
+          const enc = str => str.split("/").map(encodeURIComponent).join("/");
+          dom.link.href = `${repo.html_url}/tree/${encodeURIComponent(branch)}/${enc(TARGET.basePath)}`;
+        } else {
+          dom.link.href = repo.html_url;
+        }
+      };
+
+      // Map typed errors to user-facing alert copy; raw error stays in console.
+      const handleError = err => {
+        console.error(err);
+        if (err instanceof RateLimitError) {
+          const when = err.resetAt ? `at ${formatHHMM(err.resetAt)}` : "shortly";
+          showError({
+            title: "RATE LIMIT REACHED",
+            message: `GitHub API rate limit exhausted. Resets ${when}.`,
+            showRetry: true
+          });
+        } else if (err instanceof NotFoundError) {
+          showError({
+            title: "REPOSITORY NOT FOUND",
+            message: `Could not find ${TARGET.owner}/${TARGET.repo}. Check the URL.`,
+            showRetry: false
+          });
+        } else if (err instanceof HttpError) {
+          showError({
+            title: "GITHUB ERROR",
+            message: `GitHub returned HTTP ${err.status}. Try again later.`,
+            showRetry: true
+          });
+        } else {
+          showError({
+            title: "COULD NOT REACH GITHUB",
+            message: "Network error. Check your connection and retry.",
+            showRetry: true
+          });
+        }
+      };
+
+      // Shared render path for cold-fetch and warm-cache boot.
+      const hydrateUI = hash => {
+        renderHero(state.repo);
+        state.currentPath = state.dirIndex.has(hash) ? hash : "";
+        renderDirectoryView(state.currentPath);
+      };
+
+      // Warm path: render cached data instantly, revalidate in background.
+      // Cold path: load + cache. Dispatches to the mode-specific boot/revalidate;
+      // both fetches are abortable via newAbortController.
+      const boot = async () => {
+        const ctrl = newAbortController();
+        const cache = readCache();
+        if (MODE === "repos") return bootRepos(ctrl, cache);
+        return bootFiles(ctrl, cache);
+      };
+
+      const bootFiles = async (ctrl, cache) => {
+        if (cache) {
+          state.repo = cache.repo;
+          state.tree = cache.tree;
+          state.dirIndex = buildDirIndex(state.tree, TARGET.basePath);
+          hydrateUI(currentHashPath());
+          showView("main");
+          setCacheLabel("CACHED · REVALIDATING…");
+          revalidateFiles(cache, ctrl.signal).catch(() => {});
+          return;
+        }
+
+        showView("loader");
+        try {
+          const repoRes = await githubFetch(repoApiPath(), { signal: ctrl.signal });
+          const treeRes = await githubFetch(treePath(repoRes.body.default_branch), { signal: ctrl.signal });
+          if (treeRes.body.truncated) {
+            showError({
+              title: "REPOSITORY TOO LARGE",
+              message:
+                "GitHub truncated the tree response (repo exceeds the recursive endpoint limit). Cannot list files reliably.",
+              showRetry: false
+            });
+            return;
+          }
+          state.repo = repoRes.body;
+          state.tree = treeRes.body.tree;
+          state.dirIndex = buildDirIndex(state.tree, TARGET.basePath);
+
+          writeCache({
+            repo: state.repo,
+            tree: state.tree,
+            etag: { repo: repoRes.etag, tree: treeRes.etag }
+          });
+
+          hydrateUI(currentHashPath());
+          showView("main");
+          setCacheLabel(`UPDATED ${formatHHMM()}`);
+        } catch (err) {
+          if (err?.name === "AbortError") return;
+          handleError(err);
+        }
+      };
+
+      // Parallel last-mod lookup — one /branches/:branch call per repo.
+      // Failures degrade to null (shown as "—") so a single bad repo doesn't
+      // break the whole list.
+      const fetchLastMods = async (repos, signal) => {
+        const pairs = await Promise.all(
+          repos.map(async r => {
+            try {
+              const res = await githubFetch(branchPath(r.owner.login, r.name, r.default_branch), { signal });
+              return [r.name, res.body?.commit?.commit?.committer?.date || null];
+            } catch {
+              return [r.name, null];
+            }
+          })
+        );
+        return Object.fromEntries(pairs);
+      };
+
+      // Initial repos-mode view from the URL hash: "" → list, "/..." → files.
+      const initialReposPath = () => hashToRepoPath(currentHashPath());
+
+      const bootRepos = async (ctrl, cache) => {
+        if (cache) {
+          state.repos = cache.repos;
+          state.lastMods = cache.lastMods || {};
+          state.repo = cache.repo || null;
+          state.tree = cache.tree || [];
+          state.dirIndex = buildDirIndex(state.tree, "");
+          renderReposHero(cache.ownerLogin || TARGET.owner);
+          const path = initialReposPath();
+          state.currentPath = path === null ? null : state.dirIndex.has(path) ? path : "";
+          renderDirectoryView(state.currentPath);
+          showView("main");
+          setCacheLabel("CACHED · REVALIDATING…");
+          revalidateRepos(cache, ctrl.signal).catch(() => {});
+          return;
+        }
+
+        showView("loader");
+        try {
+          // Phase 1: repos list + self-repo metadata in parallel.
+          const [reposRes, repoRes] = await Promise.all([
+            githubFetch(userReposPath(), { signal: ctrl.signal }),
+            githubFetch(repoApiPath(), { signal: ctrl.signal })
+          ]);
+          const ownerLogin = reposRes.body[0]?.owner?.login || TARGET.owner;
+          const filtered = reposRes.body.filter(r => r.homepage && r.name !== TARGET.repo);
+
+          // Phase 2: last-mods for each repo + self-repo tree in parallel.
+          const [lastMods, treeRes] = await Promise.all([
+            fetchLastMods(filtered, ctrl.signal),
+            githubFetch(treePath(repoRes.body.default_branch), { signal: ctrl.signal })
+          ]);
+          const tree = treeRes.body?.truncated ? [] : treeRes.body?.tree || [];
+
+          state.repos = filtered;
+          state.lastMods = lastMods;
+          state.repo = repoRes.body;
+          state.tree = tree;
+          state.dirIndex = buildDirIndex(tree, "");
+
+          writeCache({
+            repos: filtered,
+            lastMods,
+            ownerLogin,
+            repo: state.repo,
+            tree,
+            etag: { repos: reposRes.etag, repo: repoRes.etag, tree: treeRes.etag }
+          });
+
+          renderReposHero(ownerLogin);
+          const path = initialReposPath();
+          state.currentPath = path === null ? null : state.dirIndex.has(path) ? path : "";
+          renderDirectoryView(state.currentPath);
+          showView("main");
+          setCacheLabel(`UPDATED ${formatHHMM()}`);
+        } catch (err) {
+          if (err?.name === "AbortError") return;
+          handleError(err);
+        }
+      };
+
+      // Parallel ETag-conditional refresh of cached repo + tree; silent on error.
+      const revalidateFiles = async (cache, signal) => {
+        try {
+          // Known default_branch from cache lets both conditional fetches fire in parallel.
+          const cachedBranch = cache.repo.default_branch;
+          let [repoRes, treeRes] = await Promise.all([
+            githubFetch(repoApiPath(), { etag: cache.etag?.repo, signal }),
+            githubFetch(treePath(cachedBranch), { etag: cache.etag?.tree, signal })
+          ]);
+
+          // Default branch rename: refetch the tree against the new name without ETag.
+          if (repoRes.status === 200 && repoRes.body.default_branch !== cachedBranch) {
+            treeRes = await githubFetch(treePath(repoRes.body.default_branch), { signal });
+          }
+
+          const repoChanged = repoRes.status === 200;
+          const treeChanged = treeRes.status === 200;
+
+          if (repoChanged) state.repo = repoRes.body;
+          if (treeChanged) {
+            if (treeRes.body.truncated) {
+              // Upstream now truncates — keep the cached view and warn via label.
+              setCacheLabel("CACHED · UPSTREAM TRUNCATED");
+              return;
+            }
+            state.tree = treeRes.body.tree;
+            state.dirIndex = buildDirIndex(state.tree, TARGET.basePath);
+            // Current path vanished after rebuild → reset to root; sync address bar.
+            if (!state.dirIndex.has(state.currentPath)) {
+              state.currentPath = "";
+              history.replaceState({ path: "" }, "", location.pathname + location.search);
+            }
+          }
+
+          writeCache({
+            repo: state.repo,
+            tree: state.tree,
+            etag: {
+              repo: repoChanged ? repoRes.etag : cache.etag?.repo,
+              tree: treeChanged ? treeRes.etag : cache.etag?.tree
+            }
+          });
+
+          if (repoChanged) renderHero(state.repo);
+          if (treeChanged) renderDirectoryView(state.currentPath);
+          setCacheLabel(`UPDATED ${formatHHMM()}`);
+        } catch (err) {
+          if (err?.name === "AbortError") return;
+          if (err instanceof RateLimitError) {
+            showRateLimitBanner(err.resetAt);
+            setCacheLabel("CACHED · API RATE-LIMITED");
+            return;
+          }
+          // Any other revalidation error → stay on cached content silently,
+          // but clear the "REVALIDATING…" label so the UI doesn't look stuck.
+          setCacheLabel("CACHED");
+        }
+      };
+
+      // Parallel ETag refresh of repos + self-repo + self-tree. Silent on error.
+      const revalidateRepos = async (cache, signal) => {
+        try {
+          const cachedBranch = cache.repo?.default_branch;
+          const [reposRes, repoRes, treeRes] = await Promise.all([
+            githubFetch(userReposPath(), { etag: cache.etag?.repos, signal }),
+            githubFetch(repoApiPath(), { etag: cache.etag?.repo, signal }),
+            cachedBranch
+              ? githubFetch(treePath(cachedBranch), { etag: cache.etag?.tree, signal })
+              : Promise.resolve({ status: 200, body: { tree: [], truncated: false }, etag: null })
+          ]);
+
+          let currentTreeRes = treeRes;
+          if (repoRes.status === 200 && repoRes.body.default_branch !== cachedBranch) {
+            // Default-branch rename on the self-repo: refetch tree fresh.
+            currentTreeRes = await githubFetch(treePath(repoRes.body.default_branch), { signal });
+          }
+
+          const reposChanged = reposRes.status === 200;
+          const repoChanged = repoRes.status === 200;
+          const treeChanged = currentTreeRes.status === 200;
+
+          let ownerLogin = cache.ownerLogin || TARGET.owner;
+          if (reposChanged) {
+            ownerLogin = reposRes.body[0]?.owner?.login || ownerLogin;
+            state.repos = reposRes.body.filter(r => r.homepage && r.name !== TARGET.repo);
+            state.lastMods = await fetchLastMods(state.repos, signal);
+          }
+          if (repoChanged) state.repo = repoRes.body;
+          if (treeChanged) {
+            state.tree = currentTreeRes.body?.truncated ? [] : currentTreeRes.body?.tree || [];
+            state.dirIndex = buildDirIndex(state.tree, "");
+            // Current path vanished after rebuild → reset to list view.
+            if (state.currentPath !== null && !state.dirIndex.has(state.currentPath)) {
+              state.currentPath = null;
+              history.replaceState({}, "", location.pathname + location.search);
+            }
+          }
+
+          writeCache({
+            repos: state.repos,
+            lastMods: state.lastMods,
+            ownerLogin,
+            repo: state.repo,
+            tree: state.tree,
+            etag: {
+              repos: reposChanged ? reposRes.etag : cache.etag?.repos,
+              repo: repoChanged ? repoRes.etag : cache.etag?.repo,
+              tree: treeChanged ? currentTreeRes.etag : cache.etag?.tree
+            }
+          });
+
+          if (reposChanged || repoChanged) renderReposHero(ownerLogin);
+          renderDirectoryView(state.currentPath);
+          setCacheLabel(`UPDATED ${formatHHMM()}`);
+        } catch (err) {
+          if (err?.name === "AbortError") return;
+          if (err instanceof RateLimitError) {
+            showRateLimitBanner(err.resetAt);
+            setCacheLabel("CACHED · API RATE-LIMITED");
+            return;
+          }
+          // Any other revalidation error → stay on cached content silently,
+          // but clear the "REVALIDATING…" label so the UI doesn't look stuck.
+          setCacheLabel("CACHED");
+        }
+      };
+
+      dom.errorRetry.addEventListener("click", boot);
+      boot();
+
+      // Intercept folder/breadcrumb clicks only; file anchors and modifier-clicks
+      // keep native behavior (new tab, etc.).
+      document.addEventListener("click", e => {
+        if (!state.dirIndex) return;
+        const a = e.target.closest("a[data-path]");
+        if (!a) return;
+        if (a.dataset.type === "file") return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        navigateTo(a.dataset.path);
+      });
+
+      // popstate = back/forward, hashchange = manual URL edits. Both may fire
+      // for the same back/forward, so dedup against state.currentPath.
+      const onHashNavigation = () => {
+        if (!state.dirIndex) return;
+        const raw = currentHashPath();
+        const next = MODE === "repos" ? hashToRepoPath(raw) : raw;
+        if (next === state.currentPath) return;
+        navigateTo(next, { push: false });
+      };
+      window.addEventListener("popstate", onHashNavigation);
+      window.addEventListener("hashchange", onHashNavigation);
+    </script>
+  </body>
+</html>
